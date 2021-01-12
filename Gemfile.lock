@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    termclock (0.1.0)
+    termclock (0.1.1)
+      linux_stat
 
 GEM
   remote: https://rubygems.org/
