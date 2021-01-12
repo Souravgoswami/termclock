@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
 	s.executables = s.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
 	s.require_paths = ["lib"]
 	s.bindir = "exe"
-	s.add_runtime_dependency 'linux_stat'
+	s.add_runtime_dependency 'linux_stat', '~> 1.3.0'
 end
