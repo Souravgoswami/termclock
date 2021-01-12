@@ -53,16 +53,18 @@ module Termclock
 
 		get_message = proc {
 			case Time.now.hour
-			when 6...12
+			when 5...12
 				"\u{1F304} Good Morning..."
 			when 12...16
 				"\u26C5 Good Afternoon..."
-			when 16...19
-				"\u{1F306} Good Evening..."
-			when 19...22
+			when 16...18
+				"\u{1F307} Good Evening..."
+			when 18...20
+				"\u{1F31F} Good Evening..."
+			when 20...24
 				"\u{1F303} Good Night..."
 			else
-				"\u{1F30C} Good Night..."
+				"\u{2728} Good Night..."
 			end
 		}
 
@@ -123,23 +125,23 @@ module Termclock
 
 			_m = LS::Net.total_bytes
 			ip = "\u{1F30F} IP: #{LS::Net.ipv4_private}"
-			net_usage = "\u{1F4C8} D/L | U/L: #{LS::PrettifyBytes.convert_short_binary _m[:received]}"\
-			" | #{LS::PrettifyBytes.convert_short_binary _m[:transmitted]}"
+			net_usage = "\u{1F4C8} D/L | U/L: #{LS::PrettifyBytes.convert_short_binary(_m[:received].to_i)}"\
+			" | #{LS::PrettifyBytes.convert_short_binary(_m[:transmitted].to_i)}"
 
 			_m = LS::Memory.stat
 			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i * 1024)}"\
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i * 1024)}"\
-			" (#{_m[:percent_used]}%)"
+			" (#{_m[:percent_used].to_i}%)"
 
 			_m = LS::Swap.stat
 			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i * 1024)}"\
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i * 1024)}"\
-			" (#{_m[:percent_used]}%)"
+			" (#{_m[:percent_used].to_i}%)"
 
 			_m = LS::Filesystem.stat
 			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i)}"\
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i)}"\
-			" (#{_m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
+			" (#{_m[:used].to_i*(100).fdiv(_m[:total].to_i).round(2)}%)"
 
 			process = "\u{1F9EE} Process: #{LS::Process.count}"
 
