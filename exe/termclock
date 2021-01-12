@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+require 'termclock'
+
+$-v = true
+
+begin
+	print "\e[?25l"
+
+	arg_col = ARGV.find { |x| x[/\A\-(\-colour|\-color|c|)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
+
+	colours = if arg_col
+		abort("4 colours are needed. Example: -c=f55,55f,55f,3eb") if arg_col.length != 4
+		arg_col
+	else
+		%w(ff5555 5555ff 5555ff 33eebb)
+	end
+
+	colours.map! { |x|
+		begin
+			Termclock.hex2rgb(x)
+		rescue ArgumentError
+			abort $!.to_s
+		end
+	}
+
+	chars = ARGV.find { |x| x[/\A\-(\-character|char)=.*\z/] } &.split(?=) &.at(1)
+	Termclock::ParseCharacters.transform_characters!(chars[0]) if chars
+
+	Termclock.main(*colours)
+rescue Interrupt, SignalException
+	print "\e[H\e[2J\e[3J"
+ensure
+	print "\e[?25h"
+end
