@@ -5,6 +5,32 @@ A clock that runs on the LinuxTerminal!
 
 This project is a Ruby gem, a continuation of my previous project [term-clock](https://github.com/Souravgoswami/term-clock).
 
+## Dependencies
+This program depends on Ruby, and Rubygem. It also has dependency of LinuxStat.
+To install the whole gem, you need these packages:
+
+1. A Linux Virtual Terminal Emulator (not TTYs)
+2. Noto Fonts Emoji or Fonts Noto Color Emoji
+3. GCC
+4. Make
+
+On ArchLinux, you can install all of them simply:
+
+```
+# pacman -S ruby gcc make noto-fonts-emoji
+```
+
+On Ubuntu, LinuxMint, Kali Linux, Debian and other Debian based distributions
+however, you also need ruby-dev package once, as a build-time dependency of LinuxStat,
+you can uninstall it (ruby-dev) once the program is built:
+
+```
+# apt install ruby ruby-dev gcc make fonts-noto-color-emoji
+```
+
+In both cases, gcc and make are buildtime dependency and you can remove them
+once the program is built.
+
 ## Installation
 To install this gem, run:
 
