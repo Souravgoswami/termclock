@@ -124,7 +124,7 @@ module Termclock
 			end
 
 			if print_date
-				date = time_now.strftime('%a, %d %m %Y').center(width)
+				date = time_now.strftime('%a, %d %B %Y').center(width)
 					.gradient(tc1, tc2, bold: bold)
 			end
 
