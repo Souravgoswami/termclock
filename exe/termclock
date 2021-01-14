@@ -24,7 +24,7 @@ begin
 	}
 
 	chars = ARGV.find { |x| x[/\A\-(\-character|char)=.*\z/] } &.split(?=) &.at(1)
-	Termclock::ParseCharacters.transform_characters!(chars[0]) if chars
+	Termclock::ParseCharacters.transform_characters!(*chars) if chars
 
 	_refresh_time = ARGV.find { |x| x[/\A\-(\-refresh|r)=.*\z/] } &.split(?=) &.at(1)
 	refresh_time = _refresh_time ? _refresh_time.to_f : 0.1
