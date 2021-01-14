@@ -39,13 +39,14 @@ $ gem install termclock
 ```
 
 ## Usage
-To run termclock, open the terminal and type:
+### To run termclock, open the terminal and type:
 
 ```
 $ termclock
 ```
 
-Termclock also accepts arguments. You can specify the colours:
+### Termclock also accepts arguments.
++ You can specify the colours:
 
 ```
 $ termclock --colour=f55,55f,55f,eee
@@ -57,7 +58,7 @@ Or
 $ termclock -c=f55,55f,55f,eee
 ```
 
-You can also change the default characters:
++ You can also change the default characters:
 
 ```
 termclock -char="⬢"
@@ -67,6 +68,28 @@ Or
 ```
 termclock --character="⬢"
 ```
+
++ To change the default message (text) colour:
+
+```
+termclock -text-colour=fa0,55f
+```
+
+Or
+
+```
+termclock -tc=fa0,55f
+```
+
+### Colours
+The colours termclock accept are hex colours. You can have either of these formats:
+1. #ff5555
+2. #ff5
+3. ff5555
+4. ff5
+
+Using either #3eb or 3eb is equivalent to #33eebb.
+Using either #3ce3b5 is same as 3ce3b5 (no #).
 
 Note that any characters upto 3 bytes work. An emoji can break term clock's look.
 
