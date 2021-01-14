@@ -1,5 +1,5 @@
 class String
-	def gradient(*all_rgbs, bg: false, exclude_spaces: false)
+	def gradient(*all_rgbs, bg: false, exclude_spaces: false, bold: false)
 		temp = ''
 
 		r, g, b = all_rgbs[0]
@@ -44,6 +44,8 @@ class String
 			_r = _r.send(r_op, r_val * -1) if r_op
 			_g = _g.send(g_op, g_val * -1) if g_op
 			_b = _b.send(b_op, b_val * -1) if b_op
+
+			temp << "\e[1m" if bold
 
 			i = -1
 			while (i += 1) < len
