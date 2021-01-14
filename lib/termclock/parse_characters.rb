@@ -73,11 +73,11 @@ module Termclock
 		```````
 
 		# :
-		⬩⬩
-		⬩⬩
+		\u2B29\u2B29
+		\u2B29\u2B29
 
-		⬩⬩
-		⬩⬩
+		\u2B29\u2B29
+		\u2B29\u2B29
 
 		# $
 		\s\s
@@ -290,17 +290,17 @@ module Termclock
 			end
 
 			def display(c)
-				j = ['', '']
+				j = []
 
-				c.upcase.chars.map! { |x|
-					@@characters.fetch(x, x).split(?\n.freeze)
+				c.upcase.each_char { |x|
+					@@characters.fetch(x, x).split(NEWLINE)
 					.each_with_index { |z, i|
 						_j = j[i]
 						_j && _j << z || j[i] = z
 					}
 				}
 
-				j.join(?\n.freeze)
+				j.join(NEWLINE)
 			end
 		end
 	end

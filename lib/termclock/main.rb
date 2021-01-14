@@ -1,5 +1,8 @@
 module Termclock
-	def self.main(colour1, colour2, colour3, colour4, sleep = 0.1)
+	COLOURTERM = ENV.key?('COLORTERM')
+	CLEAR = COLOURTERM ? "\e[H\e[2J\e[3J" : "\e[H"
+
+	def self.start(colour1, colour2, colour3, colour4, textcolour1 = nil, textcolour2 = nil, sleep: 0.1)
 		newline = ?\n.freeze
 		space = ?\s.freeze
 
@@ -44,8 +47,17 @@ module Termclock
 		colours = [rs1, gs1, bs1].transpose.zip([rs2, gs2, bs2].transpose)
 		colours.unshift(colours[0])
 		colours.push(colours[-1])
+
+		# Text colours
+		tc1 = textcolour1 ? hex2rgb(textcolour1) : hex2rgb('5555ff')
+		tc2 = textcolour2 ? hex2rgb(textcolour2) : hex2rgb('3ce3b5')
+
 		cpu_usage = 0
 		cpu_usage_t = Thread.new { }
+
+		current_net_usage = ''
+		current_net_usage_t = Thread.new { }
+
 		message_time = Time.now.to_i - 5
 		message = ''
 		message_temp = ''
@@ -69,7 +81,6 @@ module Termclock
 		}
 
 		i = -1
-
 		while true
 			i += 1
 			time_now = Time.now
@@ -99,34 +110,50 @@ module Termclock
 			end
 
 			time = time_now.strftime("%H %M %S %2N").split.join(splitter)
-			art = Termclock::ParseCharacters.display(time)
+			art = Termclock::ParseCharacters.display(time).lines
 
-			art_aligned = art.lines.each_with_index do |x, i|
+			art_aligned = art.each_with_index do |x, i|
 				chomped = x.chomp(''.freeze).+(newline)
 				gr = chomped.gradient(*colours[i])
 				x.replace(space.*(width./(2.0).-(chomped.length / 2.0).abs.to_i + 1) + gr)
 			end.join
 
-			horizontal_gap = "\e[#{height./(2.0).-(art.lines.length / 2.0).to_i + 1}H"
+			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
 
 			unless cpu_usage_t.alive?
 				cpu_usage_t = Thread.new { cpu_usage = LS::CPU.usage(0.25) }
 			end
 
-			cpu = "\u{1F9E0} CPU: #{cpu_usage}% (#{LS::CPU.count_online} / #{LS::CPU.count})"
+			unless current_net_usage_t.alive?
+				current_net_usage_t = Thread.new do
+					_m = LS::Net.current_usage(0.25)
+
+					_dl = LS::PrettifyBytes.convert_short_binary(_m[:received], precision: 0)
+					_ul = LS::PrettifyBytes.convert_short_binary(_m[:transmitted], precision: 0)
+
+					current_net_usage = "\u{1F4CA} Curr. DL/UL: #{sprintf "%-7s", _dl} | #{sprintf "%7s", _ul}"
+				end
+			end
+
+			cpu = "\u{1F9E0} CPU: #{sprintf "%5s", cpu_usage}% (#{LS::CPU.count_online} / #{LS::CPU.count})"
 
 			battery = if LS::Battery.present?
 				stat = LS::Battery.stat
 				emoji = LS::Battery.charging? ? "\u{1F4A1}" : "\u{1F50B}"
-				"#{emoji} Battery: #{stat[:charge].to_i}% (#{stat[:status]})"
+				plug = LS::Battery.charging? ? "\u{1F50C} " : ''.freeze
+				"#{emoji} Battery: #{stat[:charge].to_i}% (#{plug}#{stat[:status]})"
 			else
 				''.freeze
 			end
 
+			user = "\u{1F481} User: #{LS::User.get_current_user.capitalize}"
+			hostname = "\u{1F4BB} Hostname: #{LS::OS.hostname}"
+
 			_m = LS::Net.total_bytes
-			ip = "\u{1F30F} IP: #{LS::Net.ipv4_private}"
-			net_usage = "\u{1F4C8} D/L | U/L: #{LS::PrettifyBytes.convert_short_binary(_m[:received].to_i)}"\
-			" | #{LS::PrettifyBytes.convert_short_binary(_m[:transmitted].to_i)}"
+			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
+
+			net_usage = "\u{1F4C8} Totl. DL/UL: #{sprintf "%-7s", LS::PrettifyBytes.convert_short_binary(_m[:received], precision: 0)}"\
+			" | #{sprintf "%7s", LS::PrettifyBytes.convert_short_binary(_m[:transmitted], precision: 0)}"
 
 			_m = LS::Memory.stat
 			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i * 1024)}"\
@@ -144,18 +171,19 @@ module Termclock
 			" (#{_m[:used].to_i*(100).fdiv(_m[:total].to_i).round(2)}%)"
 
 			process = "\u{1F9EE} Process: #{LS::Process.count}"
+			message_final = message.rjust(message_align).+(_caret).gradient(tc1, tc2, exclude_spaces: true)
 
-			max_l = [process, ip, battery, net_usage].map(&:length).max
+			max_l = [hostname, process, ip, battery, current_net_usage, net_usage].map(&:length).max + 4
 
-			info = <<~EOF.gradient(*colours[2], exclude_spaces: true)
-				\s#{cpu}#{?\s.*(width.-(cpu.length + max_l + 4).abs)}#{battery}
-				\s#{memory}#{?\s.*(width.-(memory.length + max_l + 4).abs)}#{ip}
-				\s#{swap}#{?\s.*(width.-(swap.length + max_l + 4).abs)}#{net_usage}
-				\s#{fs}#{?\s.*(width.-(fs.length + max_l + 4).abs)}#{process}
+			info = <<~EOF.gradient(tc1, tc2, exclude_spaces: true)
+				\s#{user}#{?\s.*(width.-(user.length + max_l).abs)}#{hostname}
+				\s#{cpu}#{?\s.*(width.-(cpu.length + max_l).abs)}#{battery}
+				\s#{memory}#{?\s.*(width.-(memory.length + max_l).abs)}#{ip}
+				\s#{swap}#{?\s.*(width.-(swap.length + max_l).abs)}#{current_net_usage}
+				\s#{fs}#{?\s.*(width.-(fs.length + max_l).abs)}#{net_usage}
 			EOF
 
-			print "#{CLEAR}#{info}#{horizontal_gap}#{art_aligned}\n"\
-			"#{message.rjust(message_align).+(_caret).gradient(*colours[1], exclude_spaces: true)}"
+			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{message_final}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact

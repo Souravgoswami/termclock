@@ -1,8 +1,3 @@
-# frozen_string_literal: true
-COLOURTERM = ENV.key?('COLORTERM')
-CLEAR = COLOURTERM ? "\e[H\e[2J\e[3J" : "\e[H"
-$-n, $-s = ?\n, ?\s
-
 require 'linux_stat'
 require 'io/console'
 require_relative "termclock/string"
