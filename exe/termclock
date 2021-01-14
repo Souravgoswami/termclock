@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'termclock'
-
-$-v = true
+$-v = nil
 
 if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 	puts <<~EOF
