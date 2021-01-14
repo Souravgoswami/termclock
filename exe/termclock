@@ -15,6 +15,7 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
+			--refresh|r\t\t\tSpecify delay or refresh time
 			--text-colour|-tc\t\tSpecify text colour (2 colours)
 	EOF
 
