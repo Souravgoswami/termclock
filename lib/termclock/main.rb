@@ -2,7 +2,12 @@ module Termclock
 	COLOURTERM = ENV.key?('COLORTERM')
 	CLEAR = COLOURTERM ? "\e[H\e[2J\e[3J" : "\e[H"
 
-	def self.start(colour1, colour2, colour3, colour4, textcolour1 = nil, textcolour2 = nil, sleep: 0.1, bold: false, print_info: true)
+	def self.start(colour1, colour2, colour3, colour4, textcolour1 = nil,
+		textcolour2 = nil, sleep: 0.1, bold: false,
+		print_info: true, print_message: true,
+		print_date: true
+	)
+
 		newline = ?\n.freeze
 		space = ?\s.freeze
 
@@ -60,8 +65,11 @@ module Termclock
 
 		message_time = Time.now.to_i - 5
 		message = ''
+		message_final = ''
 		message_temp = ''
 		caret = "\u2588"
+
+		date, info = '', ''
 
 		get_message = proc {
 			case Time.now.hour
@@ -86,21 +94,6 @@ module Termclock
 			time_now = Time.now
 			height, width = *STDOUT.winsize
 
-			message_align = width - i % width + message.length / 2 - 4
-
-			if (width - i % width <= message.length)
-				message.replace(message[1..-1])
-				message_align = width - i % width + 4
-			else
-				message.clear if width - i % width == width
-				message_temp = get_message.call
-
-				if message_temp != message
-					message << message_temp[message.length..message.length  + 1]
-
-				end
-			end
-
 			if time_now.to_f./(0.5).to_i.even?
 				splitter = ?:.freeze
 				_caret = caret
@@ -109,7 +102,33 @@ module Termclock
 				_caret = ''
 			end
 
-			time = time_now.strftime("%H %M %S %2N").split.join(splitter)
+			if print_message
+				message_align = width - i % width + message.length / 2 - 4
+				if (width - i % width <= message.length)
+					message.replace(message[1..-1])
+					message_align = width - i % width + 4
+				else
+					message.clear if width - i % width == width
+					message_temp = get_message.call
+
+					if message_temp != message
+						message << message_temp[message.length..message.length  + 1]
+					end
+				end
+
+				message_final = message.rjust(message_align).+(_caret).gradient(tc1, tc2, exclude_spaces: true, bold: bold)
+			end
+
+			if print_info
+				info = system_info(width, tc1, tc2, bold)
+			end
+
+			if print_date
+				date = time_now.strftime('%a, %d %m %Y').center(width)
+					.gradient(tc1, tc2, bold: bold)
+			end
+
+			time = time_now.strftime('%H %M %S %2N').split.join(splitter)
 			art = Termclock::ParseCharacters.display(time).lines
 
 			art_aligned = art.each_with_index do |x, i|
@@ -119,10 +138,8 @@ module Termclock
 			end.join
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
-			info = print_info ? system_info(width, tc1, tc2, bold) : ''.freeze
-			message_final = message.rjust(message_align).+(_caret).gradient(tc1, tc2, exclude_spaces: true, bold: bold)
 
-			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{message_final}"
+			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact

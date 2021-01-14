@@ -34,8 +34,21 @@ begin
 
 	bold = ARGV.any? { |x| x[/\A\-\-bold\z/] }
 	no_print_info = ARGV.any? { |x| x[/\A\-(\-no\-sysinfo|ni)\z/] }
+	no_print_message = ARGV.any? { |x| x[/\A\-(\-no\-message|nm)\z/] }
+	no_print_date = ARGV.any? { |x| x[/\A\-(\-no\-date|nd)\z/] }
 
-	Termclock.start(*colours, *text_colours, sleep: refresh_time, bold: bold, print_info: !no_print_info)
+	clean = ARGV.any? { |x| x[/\A\-(\-clean)\z/] }
+
+	if clean
+		no_print_info = no_print_message = no_print_date = true
+	end
+
+	Termclock.start(
+		*colours, *text_colours, sleep: refresh_time,
+		bold: bold, print_info: !no_print_info,
+		print_message: !no_print_message,
+		print_date: !no_print_date
+	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"
 ensure
