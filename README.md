@@ -46,15 +46,29 @@ $ termclock
 ```
 
 ### Termclock also accepts arguments.
+Here are list of all the arguments:
+```
+Arguments:
+        --help|-h                       Shows this help section
+        --character=|char=              Draws specified character
+        --clean                         Just run the clean bare clock
+        --colour=|-c=                   Specify hex colour (4 colours)
+                                        [ with or without # ]
+        --no-date|-nd                   Shows no date
+        --no-message|-nm                Shows no messages
+        --no-sysinfo|-ni                Shows no system info
+        --refresh|r                     Specify delay or refresh time
+        --text-colour|-tc               Specify text colour (2 colours)
+```
+
+Run termclock `--help` or termclock `-h` to see the help.
+
+#### Here are some basic examples:
 + You can specify the colours:
 
 ```
 $ termclock --colour=f55,55f,55f,eee
-```
-
-Or
-
-```
+# Or
 $ termclock -c=f55,55f,55f,eee
 ```
 
@@ -62,10 +76,7 @@ $ termclock -c=f55,55f,55f,eee
 
 ```
 termclock -char="⬢"
-```
-
-Or
-```
+# Or
 termclock --character="⬢"
 ```
 
@@ -73,11 +84,7 @@ termclock --character="⬢"
 
 ```
 termclock -text-colour=fa0,55f
-```
-
-Or
-
-```
+# Or
 termclock -tc=fa0,55f
 ```
 
