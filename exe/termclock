@@ -3,6 +3,24 @@ require 'termclock'
 
 $-v = true
 
+if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
+	puts <<~EOF
+		TermClock: A clock that runs on the LinuxTerminal!
+
+		Arguments:
+			--help|-h\t\t\tShows this help section
+			--character=|char=\t\tDraws specified character
+			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
+			\t\t\t\t[ with or without # ]
+			--clean\t\t\t\tJust run the clean bare clock
+			--no-sysinfo|-ni\t\tShows no system info
+			--no-date|-nd\t\t\tShows no date
+			--no-message|-nm\t\tShows no messages
+	EOF
+
+	exit 0
+end
+
 begin
 	print "\e[?25l"
 
@@ -44,8 +62,11 @@ begin
 	end
 
 	Termclock.start(
-		*colours, *text_colours, sleep: refresh_time,
-		bold: bold, print_info: !no_print_info,
+		*colours,
+		*text_colours,
+		sleep: refresh_time,
+		bold: bold,
+		print_info: !no_print_info,
 		print_message: !no_print_message,
 		print_date: !no_print_date
 	)

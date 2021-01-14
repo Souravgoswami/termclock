@@ -64,6 +64,7 @@ module Termclock
 		current_net_usage_t = Thread.new { }
 
 		message_time = Time.now.to_i - 5
+		message_counter = -1
 		message = ''
 		message_final = ''
 		message_temp = ''
@@ -88,9 +89,7 @@ module Termclock
 			end
 		}
 
-		i = -1
 		while true
-			i += 1
 			time_now = Time.now
 			height, width = *STDOUT.winsize
 
@@ -103,12 +102,13 @@ module Termclock
 			end
 
 			if print_message
-				message_align = width - i % width + message.length / 2 - 4
-				if (width - i % width <= message.length)
+				message_counter += 1
+				message_align = width - message_counter % width + message.length / 2 - 4
+				if (width - message_counter % width <= message.length)
 					message.replace(message[1..-1])
-					message_align = width - i % width + 4
+					message_align = width - message_counter % width + 4
 				else
-					message.clear if width - i % width == width
+					message.clear if width - message_counter % width == width
 					message_temp = get_message.call
 
 					if message_temp != message
