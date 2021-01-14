@@ -29,7 +29,7 @@ begin
 	_refresh_time = ARGV.find { |x| x[/\A\-(\-refresh|r)=.*\z/] } &.split(?=) &.at(1)
 	refresh_time = _refresh_time ? _refresh_time.to_f : 0.1
 
-	text_colours = ARGV.find { |x| x[/\A\-(\-text\-colour|tc|)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
+	text_colours = ARGV.find { |x| x[/\A\-(\-text\-colour|tc)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
 
 	abort("Text colours need 2 colours. Example: -tc=55f,3ce3b5") if text_colours && text_colours.length != 2
 
