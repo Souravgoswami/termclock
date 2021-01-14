@@ -48,17 +48,17 @@ $ termclock
 ### Termclock also accepts arguments.
 Here are list of all the arguments:
 ```
-Arguments:
-        --help|-h                       Shows this help section
-        --character=|char=              Draws specified character
-        --clean                         Just run the clean bare clock
-        --colour=|-c=                   Specify hex colour (4 colours)
-                                        [ with or without # ]
-        --no-date|-nd                   Shows no date
-        --no-message|-nm                Shows no messages
-        --no-sysinfo|-ni                Shows no system info
-        --refresh|r                     Specify delay or refresh time
-        --text-colour|-tc               Specify text colour (2 colours)
+--help|-h			Shows this help section
+--bold				Make texts bold
+--character=|char=		Draws specified character
+--clean				Just run the clean bare clock
+--colour=|-c=			Specify hex colour (4 colours)
+                                [ with or without # ]
+--no-date|-nd			Shows no date
+--no-message|-nm		Shows no messages
+--no-sysinfo|-ni		Shows no system info
+--refresh|r			Specify delay or refresh time
+--text-colour|-tc		Specify text colour (2 colours)
 ```
 
 Run termclock `--help` or termclock `-h` to see the help.
@@ -75,10 +75,23 @@ $ termclock -c=f55,55f,55f,eee
 + You can also change the default characters:
 
 ```
-termclock -char="⬢"
+$ termclock -char="⬢"
 # Or
-termclock --character="⬢"
+$ termclock --character="⬢"
 ```
+
+A basic example is:
+You can pass multiple characters, which will be shown in the termclock.
+
+```
+$ termclock -char="☺ ☹ "
+# Or
+$ termclock -char="꧁ ꧂ "
+```
+
+The 2nd one looks like:
+
+![Preview](https://github.com/Souravgoswami/termclock/blob/master/previews/preview2.jpg)
 
 + To change the default message (text) colour:
 

@@ -8,6 +8,7 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		Arguments:
 			--help|-h\t\t\tShows this help section
+			--bold\t\t\t\tMake texts bold
 			--character=|char=\t\tDraws specified character
 			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
