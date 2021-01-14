@@ -1,6 +1,5 @@
 module Termclock
 	module ParseCharacters
-		NEWLINE = ?\n.freeze
 		CHARACTERS = <<~EOF.freeze
 		# 0
 		````````
@@ -293,7 +292,7 @@ module Termclock
 
 					if stripped
 						replace_with = x.chars.map { |y|
-							chars = arg.chars.rotate(-1) if y == ?\n
+							chars = arg.chars.rotate(-1) if y == NEWLINE
 							next(y) if y != stripped
 							chars.rotate!(1)[0]
 						}.join

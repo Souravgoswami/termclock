@@ -1,15 +1,11 @@
 module Termclock
-	COLOURTERM = ENV.key?('COLORTERM')
-	CLEAR = COLOURTERM ? "\e[H\e[2J\e[3J" : "\e[H"
-
-	def self.start(colour1, colour2, colour3, colour4, textcolour1 = nil,
-		textcolour2 = nil, sleep: 0.1, bold: false,
+	def self.start(colour1, colour2, colour3, colour4,
+		textcolour1 = nil, textcolour2 = nil,
+		sleep: 0.1,
+		bold: false,
 		print_info: true, print_message: true,
 		print_date: true
-	)
-
-		newline = ?\n.freeze
-		space = ?\s.freeze
+		)
 
 		generate = proc do |start, stop, n = 5|
 			r_op = r_val = nil
@@ -132,9 +128,9 @@ module Termclock
 			art = Termclock::ParseCharacters.display(time).lines
 
 			art_aligned = art.each_with_index do |x, i|
-				chomped = x.chomp(''.freeze).+(newline)
+				chomped = x.chomp(''.freeze).+(NEWLINE)
 				gr = chomped.gradient(*colours[i], bold: bold)
-				x.replace(space.*(width./(2.0).-(chomped.length / 2.0).abs.to_i + 1) + gr)
+				x.replace(SPACE.*(width./(2.0).-(chomped.length / 2.0).abs.to_i + 1) + gr)
 			end.join
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"

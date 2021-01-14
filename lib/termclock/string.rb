@@ -1,4 +1,8 @@
 class String
+	NEWLINE = ?\n.freeze
+	SPACE = ?\s.freeze
+	TAB = ?\t.freeze
+
 	def gradient(*all_rgbs, bg: false, exclude_spaces: false, bold: false)
 		temp = ''
 
@@ -51,7 +55,7 @@ class String
 			while (i += 1) < len
 				_c = c[i]
 
-				if !exclude_spaces || (exclude_spaces && !(_c == ?\s.freeze || _c == ?\t.freeze))
+				if !exclude_spaces || (exclude_spaces && !(_c == SPACE || _c == TAB))
 					_r = _r.send(r_op, r_val) if r_op
 					_g = _g.send(g_op, g_val) if g_op
 					_b = _b.send(b_op, b_val) if b_op
@@ -72,7 +76,7 @@ class String
 			ret = if !c.empty?
 				chomped ? "\e[0m\n".freeze : "\e[0m".freeze
 			elsif chomped
-				?\n.freeze
+				NEWLINE
 			end
 
 			temp << ret

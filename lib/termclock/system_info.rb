@@ -1,9 +1,9 @@
 module Termclock
 	@@cpu_usage = 0
-	@@cpu_usage_t = Thread.new { }
+	@@cpu_usage_t = Thread.new { }.join
 
 	@@current_net_usage = ''
-	@@current_net_usage_t = Thread.new { }
+	@@current_net_usage_t = Thread.new { }.join
 
 	class << self
 		def system_info(width, tc1, tc2, bold)
@@ -62,11 +62,11 @@ module Termclock
 			max_l = [hostname, process, ip, battery, @@current_net_usage, net_usage].map(&:length).max + 4
 
 			<<~EOF.gradient(tc1, tc2, exclude_spaces: true, bold: bold)
-				\s#{user}#{?\s.*(width.-(user.length + max_l).abs)}#{hostname}
-				\s#{cpu}#{?\s.*(width.-(cpu.length + max_l).abs)}#{battery}
-				\s#{memory}#{?\s.*(width.-(memory.length + max_l).abs)}#{ip}
-				\s#{swap}#{?\s.*(width.-(swap.length + max_l).abs)}#{@@current_net_usage}
-				\s#{fs}#{?\s.*(width.-(fs.length + max_l).abs)}#{net_usage}
+				\s#{user}#{SPACE.*(width.-(user.length + max_l).abs)}#{hostname}
+				\s#{cpu}#{SPACE.*(width.-(cpu.length + max_l).abs)}#{battery}
+				\s#{memory}#{SPACE.*(width.-(memory.length + max_l).abs)}#{ip}
+				\s#{swap}#{SPACE.*(width.-(swap.length + max_l).abs)}#{@@current_net_usage}
+				\s#{fs}#{SPACE.*(width.-(fs.length + max_l).abs)}#{net_usage}
 			EOF
 		end
 	end
