@@ -10,12 +10,13 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 		Arguments:
 			--help|-h\t\t\tShows this help section
 			--character=|char=\t\tDraws specified character
+			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
 			\t\t\t\t[ with or without # ]
-			--clean\t\t\t\tJust run the clean bare clock
-			--no-sysinfo|-ni\t\tShows no system info
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
+			--no-sysinfo|-ni\t\tShows no system info
+			--text-colour|-tc\t\tSpecify text colour (2 colours)
 	EOF
 
 	exit 0
