@@ -48,17 +48,35 @@ $ termclock
 ### Termclock also accepts arguments.
 Here are list of all the arguments:
 ```
---help|-h			Shows this help section
---bold				Make texts bold
---character=|char=		Draws specified character
---clean				Just run the clean bare clock
---colour=|-c=			Specify hex colour (4 colours)
-                                [ with or without # ]
---no-date|-nd			Shows no date
---no-message|-nm		Shows no messages
---no-sysinfo|-ni		Shows no system info
---refresh|r			Specify delay or refresh time
---text-colour|-tc		Specify text colour (2 colours)
+1. Information:
+	--help|-h			Shows this help section
+	--version|-v			Shows termclock version
+
+2. Style:
+	--bold|-b			Make texts bold
+	--italic|-i			Make texts italic
+	--character=|char=		Draws specified character
+	--clean				Just run the clean bare clock
+	--colour=|-c=			Specify hex colour (4 colours)
+					[ with or without # ]
+
+3. Information:
+	--no-date|-nd			Shows no date
+	--no-message|-nm		Shows no messages
+	--no-sysinfo|-ni		Shows no system info
+	--refresh|r			Specify delay or refresh time
+	--text-colour|-tc		Specify text colour (2 colours)
+
+4. Formats:
+	--date-format=|-df=		Specify the date format
+					[ Run date --help for formats ]
+	--time-format=|-tf=		Specify the time format
+					[ Run date --help for formats ]
+
+Supported characters are 0 - 9, a - z, /, \, !, %, and |.
+
+This is Termclock v0.2.0
+
 ```
 
 Run termclock `--help` or termclock `-h` to see the help.
