@@ -2,11 +2,11 @@ module Termclock
 	@@cpu_usage = 0
 	@@cpu_usage_t = Thread.new { }.join
 
-	@@current_net_usage = ''
+	@@current_net_usage = "\u{1F4CA} Curr. DL/UL:"
 	@@current_net_usage_t = Thread.new { }.join
 
 	class << self
-		def system_info(width, tc1, tc2, bold)
+		def system_info(width)
 			unless @@cpu_usage_t.alive?
 				@@cpu_usage_t = Thread.new { @@cpu_usage = LS::CPU.usage(0.25) }
 			end
@@ -57,17 +57,25 @@ module Termclock
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i)}"\
 			" (#{_m[:used].to_i*(100).fdiv(_m[:total].to_i).round(2)}%)"
 
-			process = "\u{1F9EE} Process: #{LS::Process.count}"
+			pt = LS::Process.types.values
+
+			process = "\u{1F9EE} Process: T:#{sprintf "%4s", LS::Process.count}|"\
+			"R:#{sprintf "%3s", pt.count(:running)}|"\
+			"S:#{sprintf "%3s", pt.count(:sleeping)}|"\
+			"I:#{sprintf "%3s", pt.count(:idle)}"
+
+			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine} (#{LS::OS.version})"
 
 			max_l = [hostname, process, ip, battery, @@current_net_usage, net_usage].map(&:length).max + 4
 
-			<<~EOF.gradient(tc1, tc2, exclude_spaces: true, bold: bold)
+			<<~STR
 				\s#{user}#{SPACE.*(width.-(user.length + max_l).abs)}#{hostname}
-				\s#{cpu}#{SPACE.*(width.-(cpu.length + max_l).abs)}#{battery}
-				\s#{memory}#{SPACE.*(width.-(memory.length + max_l).abs)}#{ip}
-				\s#{swap}#{SPACE.*(width.-(swap.length + max_l).abs)}#{@@current_net_usage}
-				\s#{fs}#{SPACE.*(width.-(fs.length + max_l).abs)}#{net_usage}
-			EOF
+				\s#{os}#{SPACE.*(width.-(os.length + max_l).abs)}#{battery}
+				\s#{cpu}#{SPACE.*(width.-(cpu.length + max_l).abs)}#{ip}
+				\s#{memory}#{SPACE.*(width.-(memory.length + max_l).abs)}#{@@current_net_usage}
+				\s#{swap}#{SPACE.*(width.-(swap.length + max_l).abs)}#{net_usage}
+				\s#{fs}#{SPACE.*(width.-(fs.length + max_l).abs)}#{process}
+			STR
 		end
 	end
 end

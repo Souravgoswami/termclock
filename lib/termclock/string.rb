@@ -3,7 +3,12 @@ class String
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
 
-	def gradient(*all_rgbs, bg: false, exclude_spaces: false, bold: false)
+	def gradient(*all_rgbs,
+		bg: false,
+		exclude_spaces: false,
+		bold: false, italic: false, blink: false
+		)
+
 		temp = ''
 
 		r, g, b = all_rgbs[0]
@@ -12,7 +17,18 @@ class String
 
 		init = bg ? 48 : 38
 
+		style = nil
+		if bold || italic
+			style = "\e["
+			style << '1;'.freeze if bold
+			style << '3;'.freeze if italic
+			style.chop!
+			style << 'm'.freeze
+		end
+
 		each_line do |c|
+			temp << style if style
+
 			_r, _g, _b = r, g, b
 			chomped = !!c.chomp!(''.freeze)
 
@@ -48,8 +64,6 @@ class String
 			_r = _r.send(r_op, r_val * -1) if r_op
 			_g = _g.send(g_op, g_val * -1) if g_op
 			_b = _b.send(b_op, b_val * -1) if b_op
-
-			temp << "\e[1m" if bold
 
 			i = -1
 			while (i += 1) < len

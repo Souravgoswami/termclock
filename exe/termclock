@@ -8,11 +8,12 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		Arguments:
 			--help|-h\t\t\tShows this help section
-			--bold\t\t\t\tMake texts bold
+			--bold|-b\t\t\t\tMake texts bold
 			--character=|char=\t\tDraws specified character
 			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
 			\t\t\t\t[ with or without # ]
+			--italic|-i\t\t\tMake texts italic
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
@@ -52,7 +53,9 @@ begin
 	text_colours = ARGV.find { |x| x[/\A\-(\-text\-colour|tc)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
 	abort("Text colours need 2 colours. Example: -tc=55f,3ce3b5") if text_colours && text_colours.length != 2
 
-	bold = ARGV.any? { |x| x[/\A\-\-bold\z/] }
+	bold = ARGV.any? { |x| x[/\A\-(\-bold|b)\z/] }
+	italic = ARGV.any? { |x| x[/\A\-(\-italic|i)\z/] }
+
 	no_print_info = ARGV.any? { |x| x[/\A\-(\-no\-sysinfo|ni)\z/] }
 	no_print_message = ARGV.any? { |x| x[/\A\-(\-no\-message|nm)\z/] }
 	no_print_date = ARGV.any? { |x| x[/\A\-(\-no\-date|nd)\z/] }
@@ -68,6 +71,7 @@ begin
 		*text_colours,
 		sleep: refresh_time,
 		bold: bold,
+		italic: italic,
 		print_info: !no_print_info,
 		print_message: !no_print_message,
 		print_date: !no_print_date

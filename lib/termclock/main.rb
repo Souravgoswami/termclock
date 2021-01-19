@@ -3,6 +3,7 @@ module Termclock
 		textcolour1 = nil, textcolour2 = nil,
 		sleep: 0.1,
 		bold: false,
+		italic: false,
 		print_info: true, print_message: true,
 		print_date: true
 		)
@@ -112,16 +113,20 @@ module Termclock
 					end
 				end
 
-				message_final = message.rjust(message_align).+(_caret).gradient(tc1, tc2, exclude_spaces: true, bold: bold)
+				message_final = message.rjust(message_align).+(_caret).gradient(
+					tc1, tc2, exclude_spaces: true, bold: bold, italic: italic
+				)
 			end
 
 			if print_info
-				info = system_info(width, tc1, tc2, bold)
+				info = system_info(width).gradient(
+					tc1, tc2, bold: bold, italic: italic
+				)
 			end
 
 			if print_date
 				date = time_now.strftime('%a, %d %B %Y').center(width)
-					.gradient(tc1, tc2, bold: bold)
+					.gradient(tc1, tc2, bold: bold, italic: italic)
 			end
 
 			time = time_now.strftime('%H %M %S %2N').split.join(splitter)
@@ -129,7 +134,7 @@ module Termclock
 
 			art_aligned = art.each_with_index do |x, i|
 				chomped = x.chomp(''.freeze).+(NEWLINE)
-				gr = chomped.gradient(*colours[i], bold: bold)
+				gr = chomped.gradient(*colours[i], bold: bold, italic: italic)
 				x.replace(SPACE.*(width./(2.0).-(chomped.length / 2.0).abs.to_i + 1) + gr)
 			end.join
 
