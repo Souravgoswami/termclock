@@ -6,19 +6,31 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 	puts <<~EOF
 		TermClock: A clock that runs on the LinuxTerminal!
 
-		Arguments:
+		\e[1;4mArguments:\e[0m
+
+		1. Help:\e[0m
 			--help|-h\t\t\tShows this help section
-			--bold|-b\t\t\t\tMake texts bold
+
+		2. Style:\e[0m
+			--bold|-b\t\t\tMake texts bold
+			--italic|-i\t\t\tMake texts italic
 			--character=|char=\t\tDraws specified character
 			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
 			\t\t\t\t[ with or without # ]
-			--italic|-i\t\t\tMake texts italic
+
+		3. Information:\e[0m
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
 			--refresh|r\t\t\tSpecify delay or refresh time
 			--text-colour|-tc\t\tSpecify text colour (2 colours)
+
+		4. Formats:\e[0m
+			--time-format|-tf=\t\tSpecify the time format
+			\t\t\t\t[ Run date --help for formats ]
+			--date-format|-df=\t\tSpecify the date format
+			\t\t\t\t[ Run date --help for formats ]
 	EOF
 
 	exit 0
@@ -50,6 +62,12 @@ begin
 	_refresh_time = ARGV.find { |x| x[/\A\-(\-refresh|r)=.*\z/] } &.split(?=) &.at(1)
 	refresh_time = _refresh_time ? _refresh_time.to_f : 0.1
 
+	_time_format = ARGV.find { |x| x[/\A\-(\-time\-format|tf)=.*\z/] } &.split(?=) &.at(1)
+	time_format = _time_format ? _time_format : "%H %M %S %2N"
+
+	_date_format = ARGV.find { |x| x[/\A\-(\-date\-format|df)=.*\z/] } &.split(?=) &.at(1)
+	date_format = _date_format ? _date_format : "'%a, %d %B %Y'"
+
 	text_colours = ARGV.find { |x| x[/\A\-(\-text\-colour|tc)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
 	abort("Text colours need 2 colours. Example: -tc=55f,3ce3b5") if text_colours && text_colours.length != 2
 
@@ -74,7 +92,9 @@ begin
 		italic: italic,
 		print_info: !no_print_info,
 		print_message: !no_print_message,
-		print_date: !no_print_date
+		print_date: !no_print_date,
+		time_format: time_format,
+		date_format: date_format
 	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"
