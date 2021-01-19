@@ -12,6 +12,6 @@ end
 require_relative "termclock/string"
 require_relative "termclock/parse_characters"
 require_relative "termclock/system_info"
-require_relative "termclock/main"
+require_relative "termclock/start"
 require_relative "termclock/hex2rgb"
 require_relative "termclock/version"
