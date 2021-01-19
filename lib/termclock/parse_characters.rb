@@ -142,9 +142,9 @@ module Termclock
 
 		# I
 		````````
-		   `
-		   `
-		   `
+		\s\s\s``
+		\s\s\s``
+		\s\s\s``
 		````````
 
 		# J
@@ -235,8 +235,8 @@ module Termclock
 		``    ``
 		``    ``
 		``    ``
-		 `` ``
-		   `
+		\s``  ``\s
+		\s\s\s``
 
 		# W
 		``    ``
@@ -246,11 +246,11 @@ module Termclock
 		````````
 
 		# X
-		`      `
-		  `  `
-		    `
-		  `   `
-		`       `
+		``    ``
+		\s``  ``
+		\s\s\s``
+		\s``  ``
+		``    ``
 
 		# Y
 		``    ``
@@ -265,6 +265,41 @@ module Termclock
 		   ``
 		 ``
 		````````
+
+		# /
+		\s\s\s\s\s``\s
+		\s\s\s\s``\s\s
+		\s\s\s``\s\s\s
+		\s\s``\s\s\s\s
+		\s``\s\s\s\s\s
+
+		# \\
+		\s``\s\s\s\s\s
+		\s\s``\s\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s\s``\s\s
+		\s\s\s\s\s``\s
+
+		# %
+		\s\s\s\s\s``\s
+		``\s\s``\s\s
+		\s\s\s``\s\s\s
+		\s\s``\s\s``
+		\s``\s\s\s\s\s
+
+		# |
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+
+		# !
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s``\s\s\s
+		\s\s\s\s\s\s\s\s
+		\s\s\s``\s\s\s
 		EOF
 
 		class << self
