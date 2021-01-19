@@ -67,7 +67,6 @@ module Termclock
 		message = ''
 		message_final = ''
 		message_temp = ''
-		caret = "\u2588"
 
 		date, info = '', ''
 
@@ -94,10 +93,8 @@ module Termclock
 
 			if time_now.to_f./(0.5).to_i.even?
 				splitter = ?:.freeze
-				_caret = caret
 			else
 				splitter = ?$.freeze
-				_caret = ''
 			end
 
 			if print_message
@@ -115,7 +112,7 @@ module Termclock
 					end
 				end
 
-				message_final = message.rjust(message_align).+(_caret).gradient(
+				message_final = message.rjust(message_align).gradient(
 					tc1, tc2, exclude_spaces: true, bold: bold, italic: italic
 				)
 			end
