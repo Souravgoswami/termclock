@@ -84,7 +84,7 @@ begin
 	time_format = _time_format ? _time_format : "%H %M %S %2N"
 
 	_date_format = ARGV.find { |x| x[/\A\-(\-date\-format|df)=.*\z/] } &.split(?=) &.at(1)
-	date_format = _date_format ? _date_format : "'%a, %d %B %Y'"
+	date_format = _date_format ? _date_format : "%a, %d %B %Y"
 
 	text_colours = ARGV.find { |x| x[/\A\-(\-text\-colour|tc)=.*\z/] } &.split(?=) &.at(1) &.split(?,)
 	abort("Text colours need 2 colours. Example: -tc=55f,3ce3b5") if text_colours && text_colours.length != 2

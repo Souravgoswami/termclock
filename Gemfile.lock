@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    termclock (0.2.0)
+    termclock (0.2.1)
       linux_stat (>= 1.4.0)
 
 GEM
