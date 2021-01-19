@@ -8,8 +8,9 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		\e[1;4mArguments:\e[0m
 
-		1. Help:\e[0m
+		1. Help and Version:\e[0m
 			--help|-h\t\t\tShows this help section
+			--version|-v\t\t\tShows termclock version
 
 		2. Style:\e[0m
 			--bold|-b\t\t\tMake texts bold
@@ -27,12 +28,29 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--text-colour|-tc\t\tSpecify text colour (2 colours)
 
 		4. Formats:\e[0m
-			--time-format|-tf=\t\tSpecify the time format
+			--date-format=|-df=\t\tSpecify the date format
 			\t\t\t\t[ Run date --help for formats ]
-			--date-format|-df=\t\tSpecify the date format
+			--time-format=|-tf=\t\tSpecify the time format
 			\t\t\t\t[ Run date --help for formats ]
+
+		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
+
+		This is Termclock v#{Termclock::VERSION}
 	EOF
 
+	exit 0
+end
+
+if ARGV.any? { |x| x[/\A\-(-version|v)\z/] }
+	colour = [
+		[[255, 100, 100], [100, 100, 255]],
+		[[60, 230, 180], [100, 100, 255]],
+		[[255, 255, 0], [100, 100, 255]],
+		[[255, 80, 170], [255, 200, 0]],
+	].sample
+
+	colour.reverse! if rand < 0.5
+	puts "This is Termclock v#{Termclock::VERSION}".gradient(*colour)
 	exit 0
 end
 
