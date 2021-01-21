@@ -1,9 +1,9 @@
 require 'linux_stat'
 require 'io/console'
+require_relative "termclock/version"
 
 module Termclock
-	COLOURTERM = ENV.key?('COLORTERM')
-	CLEAR = COLOURTERM ? "\e[H\e[2J\e[3J" : "\e[H"
+	CLEAR = "\e[H\e[2J\e[3J".freeze
 	NEWLINE = ?\n.freeze
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
@@ -14,4 +14,3 @@ require_relative "termclock/parse_characters"
 require_relative "termclock/system_info"
 require_relative "termclock/start"
 require_relative "termclock/hex2rgb"
-require_relative "termclock/version"
