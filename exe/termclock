@@ -50,7 +50,7 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			Usually the format looks like this:
 			%H:%M:%S:%2N or %d %B, %Y
 
-			\e[3mRun date --help for formats\e[0m
+			\e[3mRun `date --help` to know more formats\e[0m
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
