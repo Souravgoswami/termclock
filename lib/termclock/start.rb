@@ -7,7 +7,8 @@ module Termclock
 		print_info: true, print_message: true,
 		print_date: true,
 		time_format: "%H %M %S %2N",
-		date_format: '%a, %d %B %Y'
+		date_format: '%a, %d %B %Y',
+		no_logo: false
 		)
 
 		generate = proc do |start, stop, n = 5|
@@ -30,7 +31,7 @@ module Termclock
 		end
 
 		gc_compact, gc_compacted = GC.respond_to?(:compact), Time.now.to_i + 7200
-		print "\e[H\e[2J\e[3J" unless COLOURTERM
+		print CLEAR
 
 		r1, g1, b1 = *colour1
 		r2, g2, b2 = *colour2
@@ -66,53 +67,100 @@ module Termclock
 		message_counter = -1
 		message = ''
 		message_final = ''
+		message_align = 0
 		message_temp = ''
+		point_five_tick = 0
 
 		date, info = '', ''
 
+		clock_emoji = ?\u{1F550}.ord.-(1).chr('utf-8')
+		clock_emoji = 12.times.map { clock_emoji.next!.dup }
+
+		braille = %W(\u2821 \u2811 \u2812 \u280A \u280C)
+
 		get_message = proc {
+			braille.rotate!
+			braille_0 = braille[0]
+
 			case Time.now.hour
 			when 5...12
-				"\u{1F304} Good Morning..."
+				"\u{1F304} #{braille_0} Good Morning #{braille_0} \u{1F304}"
 			when 12...16
-				"\u26C5 Good Afternoon..."
+				"\u26C5 #{braille_0} Good Afternoon #{braille_0} \u26C5"
 			when 16...18
-				"\u{1F307} Good Evening..."
+				"\u{1F307} #{braille_0} Good Evening #{braille_0} \u{1F307}"
 			when 18...20
-				"\u{1F31F} Good Evening..."
+				"\u{1F31F} #{braille_0} Good Evening #{braille_0} \u{1F31F}"
 			when 20...24
-				"\u{1F303} Good Night..."
+				"\u{1F303} #{braille_0} Good Night #{braille_0} \u{1F303}"
 			else
-				"\u{2728} Good Night..."
+				"\u{2728} #{braille_0} Good Night #{braille_0} \u{2728}"
 			end
 		}
+
+		version = "Termclock v#{Termclock::VERSION}"
+
+		v_col1 = hex2rgb('ff0')
+		v_col2 = hex2rgb('f55')
+		v_col3 = hex2rgb('f55')
+		v_col4 = hex2rgb('55f')
+
+		vl_2 = version.length / 2
+		_term_clock_v = version[0...vl_2].gradient(v_col1, v_col2, underline: true, bold: bold, italic: italic) <<
+			version[vl_2..-1].gradient(v_col3, v_col4, underline: true, bold: bold, italic: italic)
+
+		term_clock_v = ''
+
+		chop_message = 0
 
 		while true
 			time_now = Time.now
 			height, width = *STDOUT.winsize
 
 			if time_now.to_f./(0.5).to_i.even?
-				splitter = ?:.freeze
+				unless point_five_tick == 1
+					point_five_tick = 1
+					splitter = ?:.freeze
+					clock_emoji.rotate!
+				end
 			else
-				splitter = ?$.freeze
+				unless point_five_tick == 0
+					point_five_tick = 0
+					splitter = ?$.freeze
+				end
+			end
+
+			unless no_logo
+				term_clock_v = "\e[#{height}H #{clock_emoji[0]} #{_term_clock_v} \e[0m"
 			end
 
 			if print_message
+				message_temp = get_message.call
 				message_counter += 1
-				message_align = width - message_counter % width + message.length / 2 - 4
-				if (width - message_counter % width <= message.length)
-					message.replace(message[1..-1])
-					message_align = width - message_counter % width + 4
+				message_length = message.length
+
+				if (width - message_counter % width < 8)
+					unless chop_message == message_temp.length
+						chop_message += 1
+						message_counter -= 1
+						message_align -= 1
+						message.replace(message_temp[chop_message..-1])
+					end
 				else
+					chop_message = 0 unless chop_message == 0
 					message.clear if width - message_counter % width == width
-					message_temp = get_message.call
+					message_align = width - message_counter % width + message_length - 4
 
 					if message_temp != message
-						message << message_temp[message.length..message.length  + 1]
+						if message_length < message_temp.length
+							message.replace(message_temp[0..message_length])
+						else
+							message.replace(message_temp)
+						end
 					end
 				end
 
-				message_final = message.rjust(message_align).gradient(
+				message_final = (message).rjust(message_align).gradient(
 					tc1, tc2, exclude_spaces: true, bold: bold, italic: italic
 				)
 			end
@@ -139,7 +187,7 @@ module Termclock
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
 
-			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}"
+			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact
