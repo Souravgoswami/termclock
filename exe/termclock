@@ -3,7 +3,10 @@ require 'termclock'
 $-v = nil
 
 def version
-	_v = "This is Termclock v#{Termclock::VERSION}"
+	emoji = ?🕐.ord.-(1).chr('utf-8')
+	Time.now.strftime('%I').to_i.times { emoji.next! }
+
+	_v = "#{emoji} This is Termclock v#{Termclock::VERSION}"
 	vl_2 = _v.length / 2
 
 	v_col1 = Termclock.hex2rgb('ff0')
