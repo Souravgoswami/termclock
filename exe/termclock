@@ -107,6 +107,13 @@ begin
 		no_print_info = no_print_message = no_print_date = no_logo = true
 	end
 
+	begin
+		Time.now.strftime(time_format)
+		Time.now.strftime(date_format)
+	rescue
+		abort "Date / Time format is invalid\n#{$!.to_s}"
+	end
+
 	Termclock.start(
 		*colours,
 		*text_colours,
