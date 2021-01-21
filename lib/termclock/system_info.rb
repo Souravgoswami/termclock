@@ -64,7 +64,8 @@ module Termclock
 			"S:#{sprintf "%3s", pt.count(:sleeping)}|"\
 			"I:#{sprintf "%3s", pt.count(:idle)}"
 
-			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine} (#{LS::OS.version})"
+			_os_v = LS::OS.version
+			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine} #{"(#{_os_v unless _os_v.empty?})"}"
 
 			max_l = [hostname, process, ip, battery, @@current_net_usage, net_usage].map(&:length).max + 4
 
