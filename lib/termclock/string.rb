@@ -6,7 +6,7 @@ class String
 	def gradient(*all_rgbs,
 		bg: false,
 		exclude_spaces: false,
-		bold: false, italic: false, blink: false
+		bold: false, italic: false, underline: false
 		)
 
 		temp = ''
@@ -18,10 +18,11 @@ class String
 		init = bg ? 48 : 38
 
 		style = nil
-		if bold || italic
+		if bold || italic || underline
 			style = "\e["
 			style << '1;'.freeze if bold
 			style << '3;'.freeze if italic
+			style << '4;'.freeze if underline
 			style.chop!
 			style << 'm'.freeze
 		end
