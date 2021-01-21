@@ -55,7 +55,7 @@ module Termclock
 			_m = LS::Filesystem.stat
 			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i)}"\
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i)}"\
-			" (#{_m[:used].to_i*(100).fdiv(_m[:total].to_i).round(2)}%)"
+			" (#{_m[:used].to_i.*(100).fdiv(_m[:total].to_i).round(2)}%)"
 
 			pt = LS::Process.types.values
 
