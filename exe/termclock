@@ -8,11 +8,11 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		\e[1;4mArguments:\e[0m
 
-		1. Help and Version:\e[0m
+		\e[1m1. Help and Version:\e[0m
 			--help|-h\t\t\tShows this help section
 			--version|-v\t\t\tShows termclock version
 
-		2. Style:\e[0m
+		\e[1m2. Style:\e[0m
 			--bold|-b\t\t\tMake texts bold
 			--italic|-i\t\t\tMake texts italic
 			--character=|char=\t\tDraws specified character
@@ -20,18 +20,22 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
 			\t\t\t\t[ with or without # ]
 
-		3. Information:\e[0m
+		\e[1m3. Information:\e[0m
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
 			--refresh|r\t\t\tSpecify delay or refresh time
 			--text-colour|-tc\t\tSpecify text colour (2 colours)
+			--no-logo|-nl\t\t\tDon't show the logo at the bottom
 
-		4. Formats:\e[0m
+		\e[1m4. Formats:\e[0m
 			--date-format=|-df=\t\tSpecify the date format
-			\t\t\t\t[ Run date --help for formats ]
 			--time-format=|-tf=\t\tSpecify the time format
-			\t\t\t\t[ Run date --help for formats ]
+
+			Usually the format looks like this:
+			%H:%M:%S:%2N or %d %B, %Y
+
+			\e[3mRun date --help for formats\e[0m
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
@@ -93,13 +97,14 @@ begin
 	italic = ARGV.any? { |x| x[/\A\-(\-italic|i)\z/] }
 
 	no_print_info = ARGV.any? { |x| x[/\A\-(\-no\-sysinfo|ni)\z/] }
+	no_logo = ARGV.any? { |x| x[/\A\-(\-no\-logo|nl)\z/] }
 	no_print_message = ARGV.any? { |x| x[/\A\-(\-no\-message|nm)\z/] }
 	no_print_date = ARGV.any? { |x| x[/\A\-(\-no\-date|nd)\z/] }
 
 	clean = ARGV.any? { |x| x[/\A\-(\-clean)\z/] }
 
 	if clean
-		no_print_info = no_print_message = no_print_date = true
+		no_print_info = no_print_message = no_print_date = no_logo = true
 	end
 
 	Termclock.start(
@@ -111,6 +116,7 @@ begin
 		print_info: !no_print_info,
 		print_message: !no_print_message,
 		print_date: !no_print_date,
+		no_logo: no_logo,
 		time_format: time_format,
 		date_format: date_format
 	)
