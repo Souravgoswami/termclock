@@ -2,6 +2,18 @@
 require 'termclock'
 $-v = nil
 
+def version
+	_v = "This is Termclock v#{Termclock::VERSION}"
+	vl_2 = _v.length / 2
+
+	v_col1 = Termclock.hex2rgb('ff0')
+	v_col2 = Termclock.hex2rgb('f55')
+	v_col3 = Termclock.hex2rgb('55f')
+
+	_v[0...vl_2].gradient(v_col1, v_col2, underline: true, bold: true) <<
+		_v[vl_2..-1].gradient(v_col2, v_col3, underline: true, bold: true)
+end
+
 if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 	puts <<~EOF
 		TermClock: A clock that runs on the LinuxTerminal!
@@ -39,7 +51,7 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
-		This is Termclock v#{Termclock::VERSION}
+		#{version}
 	EOF
 
 	exit 0
@@ -54,7 +66,7 @@ if ARGV.any? { |x| x[/\A\-(-version|v)\z/] }
 	].sample
 
 	colour.reverse! if rand < 0.5
-	puts "This is Termclock v#{Termclock::VERSION}".gradient(*colour)
+	puts version
 	exit 0
 end
 
