@@ -5,6 +5,8 @@ A clock that runs on the LinuxTerminal!
 
 This project is a Ruby gem, a continuation of my previous project [term-clock](https://github.com/Souravgoswami/term-clock).
 
+TermClock isn't just a clock, it also shows various information about the system as well.
+
 ## Dependencies
 This program depends on Ruby, and Rubygem. It also has dependency of LinuxStat.
 To install the whole gem, you need these packages:
