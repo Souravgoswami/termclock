@@ -26,11 +26,15 @@ module Termclock
 
 			battery = if LS::Battery.present?
 				stat = LS::Battery.stat
-				emoji = LS::Battery.charging? ? "\u{1F4A1}" : "\u{1F50B}"
-				plug = LS::Battery.charging? ? "\u{1F50C} " : ''.freeze
+				emoji, plug = "\u{1F50B}".freeze, EMPTY
+
+				if LS::Battery.charging?
+					emoji, plug = "\u{1F4A1}".freeze, "\u{1F50C} ".freeze
+				end
+
 				"#{emoji} Battery: #{stat[:charge].to_i}% (#{plug}#{stat[:status]})"
 			else
-				''.freeze
+				EMPTY
 			end
 
 			user = "\u{1F481} User: #{LS::User.get_current_user.capitalize}"
@@ -68,21 +72,37 @@ module Termclock
 			os_v = unless _os_v.empty?
 				" (#{_os_v})"
 			else
-				''.freeze
+				EMPTY
 			end
 
 			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{os_v}"
 
-			max_l = [hostname, process, ip, battery, @@current_net_usage, net_usage].map(&:length).max + 4
+			_uptime = LS::OS.uptime.values.map! { |x| sprintf("%02d".freeze, x.to_i) }.join(?:.freeze)
+			uptime = "\u{1F3A1} Uptime: #{_uptime} (#{LS::OS.uptime_i}s)"
 
-			<<~STR
-				\s#{user}#{SPACE.*(width.-(user.length + max_l).abs)}#{hostname}
-				\s#{os}#{SPACE.*(width.-(os.length + max_l).abs)}#{battery}
-				\s#{cpu}#{SPACE.*(width.-(cpu.length + max_l).abs)}#{ip}
-				\s#{memory}#{SPACE.*(width.-(memory.length + max_l).abs)}#{@@current_net_usage}
-				\s#{swap}#{SPACE.*(width.-(swap.length + max_l).abs)}#{net_usage}
-				\s#{fs}#{SPACE.*(width.-(fs.length + max_l).abs)}#{process}
-			STR
+			_loadavg = LS::Sysinfo.loads.map! { |x| sprintf("%.2f", x) }
+			loadavg = "\u{1F9FA} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
+
+			all_info = [
+				user, hostname,
+				os, battery,
+				cpu, ip,
+				memory, @@current_net_usage,
+				swap, net_usage,
+				fs, process,
+				uptime, loadavg
+			].map(&:to_s).reject(&:empty?)
+			max_l = 0
+
+			all_info.each_with_index { |x, i|
+				max_l = x.length if i.odd? && x.length > max_l
+			}
+
+			max_l += 4
+
+			all_info.each_slice(2).map { |x, y|
+				"\s#{x}#{SPACE.*(width.-(x.length + max_l).abs)}#{y}"
+			}.join(NEWLINE)
 		end
 	end
 end
