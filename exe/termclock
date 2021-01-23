@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'termclock'
 $-v = nil
+STDOUT.sync = true
 
 def version
 	emoji = ?🕐.ord.-(1).chr('utf-8')

@@ -7,6 +7,7 @@ module Termclock
 	NEWLINE = ?\n.freeze
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
+	EMPTY = ''.freeze
 end
 
 require_relative "termclock/string"

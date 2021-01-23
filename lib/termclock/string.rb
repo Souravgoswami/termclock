@@ -2,6 +2,7 @@ class String
 	NEWLINE = ?\n.freeze
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
+	EMPTY = ''.freeze
 
 	def gradient(*all_rgbs,
 		bg: false,
@@ -31,7 +32,7 @@ class String
 			temp << style if style
 
 			_r, _g, _b = r, g, b
-			chomped = !!c.chomp!(''.freeze)
+			chomped = !!c.chomp!(EMPTY)
 
 			len = c.length
 			n_variable = exclude_spaces ? c.delete("\t\s".freeze).length : len

@@ -3,7 +3,7 @@ module Termclock
 		colour = hex.dup.to_s
 		colour.strip!
 		colour.downcase!
-		colour[0] = ''.freeze if colour[0] == ?#.freeze
+		colour[0] = EMPTY if colour[0] == ?#.freeze
 
 		# out of range
 		oor = colour.scan(/[^a-f0-9]/)
