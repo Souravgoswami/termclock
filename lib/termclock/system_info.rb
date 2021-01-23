@@ -60,7 +60,7 @@ module Termclock
 			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total] * 1024)}"\
 			" (#{_m[:percent_used]}%)"
 
-			_m = LS::FS.stat('/')
+			_m = LS::Filesystem.stat('/')
 			_m.default = 0
 
 			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used])}"\
