@@ -47,19 +47,25 @@ module Termclock
 			" | #{sprintf "%7s", LS::PrettifyBytes.convert_short_binary(_m[:transmitted], precision: 0)}"
 
 			_m = LS::Memory.stat
-			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i * 1024)}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i * 1024)}"\
-			" (#{_m[:percent_used].to_i}%)"
+			_m.default = 0
+
+			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_binary(_m[:used] * 1024)}"\
+			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total] * 1024)}"\
+			" (#{_m[:percent_used]}%)"
 
 			_m = LS::Swap.stat
-			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i * 1024)}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i * 1024)}"\
-			" (#{_m[:percent_used].to_i}%)"
+			_m.default = 0
 
-			_m = LS::Filesystem.stat
-			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used].to_i)}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total].to_i)}"\
-			" (#{_m[:used].to_i.*(100).fdiv(_m[:total].to_i).round(2)}%)"
+			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_binary(_m[:used] * 1024)}"\
+			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total] * 1024)}"\
+			" (#{_m[:percent_used]}%)"
+
+			_m = LS::FS.stat('/')
+			_m.default = 0
+
+			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used])}"\
+			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total])}"\
+			" (#{_m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
 
 			pt = LS::Process.types.values
 
