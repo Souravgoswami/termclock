@@ -173,7 +173,7 @@ module Termclock
 
 			if print_date
 				date = time_now.strftime(date_format).center(width)
-					.gradient(tc1, tc2, bold: bold, italic: italic)
+					.gradient(tc1, tc2, bold: bold, italic: italic, exclude_spaces: true)
 			end
 
 			time = time_now.strftime(time_format).split.join(splitter)
