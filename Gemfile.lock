@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     termclock (0.3.0)
-      linux_stat (>= 1.4.0)
+      linux_stat (>= 1.5.1)
 
 GEM
   remote: https://rubygems.org/
@@ -10,7 +10,7 @@ GEM
     io-console (0.5.7)
     irb (1.3.2)
       reline (>= 0.1.5)
-    linux_stat (1.4.0)
+    linux_stat (1.5.1)
     rake (13.0.3)
     reline (0.2.2)
       io-console (~> 0.5)
