@@ -180,9 +180,13 @@ module Termclock
 			art = Termclock::ParseCharacters.display(time).lines
 
 			art_aligned = art.each_with_index do |x, i|
-				chomped = x.chomp(''.freeze).+(NEWLINE)
+				chomped = x.chomp(EMPTY).+(NEWLINE)
 				gr = chomped.gradient(*colours[i], bold: bold, italic: italic)
-				x.replace(SPACE.*(width./(2.0).-(chomped.length / 2.0).abs.to_i + 1) + gr)
+
+				w = width./(2.0).-(chomped.length / 2.0) + 2
+				w = 0 if w < 0
+
+				x.replace(SPACE.*(w) + gr)
 			end.join
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
