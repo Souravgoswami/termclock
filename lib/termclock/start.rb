@@ -205,8 +205,8 @@ module Termclock
 			sleep_time = refresh.-(time_diff + EPSILON + deviation)
 			sleep_time = 0 if sleep_time < 0
 
-			deviation = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_2
 			sleep(sleep_time)
+			deviation = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_2 - sleep_time
 		end
 	end
 end
