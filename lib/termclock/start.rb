@@ -32,7 +32,6 @@ module Termclock
 		end
 
 		gc_compact, gc_compacted = GC.respond_to?(:compact), Time.now.to_i + GC_COMPACT_TIME
-		print CLEAR
 
 		r1, g1, b1 = *colour1
 		r2, g2, b2 = *colour2
@@ -58,19 +57,11 @@ module Termclock
 		tc1 = textcolour1 ? hex2rgb(textcolour1) : hex2rgb('5555ff')
 		tc2 = textcolour2 ? hex2rgb(textcolour2) : hex2rgb('3ce3b5')
 
-		cpu_usage = 0
-		cpu_usage_t = Thread.new { }
-
-		current_net_usage = ''
-		current_net_usage_t = Thread.new { }
-
-		message_time = Time.now.to_i - 5
 		message_counter = -1
 		message = ''
 		message_final = ''
 		message_align = 0
 		message_temp = ''
-		point_five_tick = 0
 
 		date, info = '', ''
 
@@ -114,22 +105,20 @@ module Termclock
 		chop_message = 0
 		deviation = 0
 
+		splitters = [?:, ?$]
+		splitter = splitters[0]
+		point_five_tick = -0.5
+
 		while true
 			monotonic_time_1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 			time_now = Time.now
 			height, width = *STDOUT.winsize
 
-			if time_now.to_f./(0.5).to_i.even?
-				unless point_five_tick == 1
-					point_five_tick = 1
-					splitter = ?:.freeze
-					clock_emoji.rotate!
-				end
-			else
-				unless point_five_tick == 0
-					point_five_tick = 0
-					splitter = ?$.freeze
-				end
+			if time_now.to_f > point_five_tick
+				point_five_tick = time_now.to_f + 0.5
+				splitters.rotate!
+				clock_emoji.rotate!
+				splitter = splitters[0]
 			end
 
 			unless no_logo
@@ -202,11 +191,11 @@ module Termclock
 
 			monotonic_time_2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 			time_diff = monotonic_time_2 - monotonic_time_1
-			sleep_time = refresh.-(time_diff + EPSILON + deviation)
+			sleep_time = refresh.-(time_diff + deviation)
 			sleep_time = 0 if sleep_time < 0
 
 			sleep(sleep_time)
-			deviation = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_2 - sleep_time
+			deviation = Process.clock_gettime(Process::CLOCK_MONOTONIC).-(monotonic_time_2 + sleep_time + EPSILON)
 		end
 	end
 end
