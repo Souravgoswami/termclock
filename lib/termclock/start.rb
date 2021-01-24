@@ -105,8 +105,8 @@ module Termclock
 		chop_message = 0
 		deviation = 0
 
-		splitters = [?:, ?$]
-		splitter = splitters[0]
+		time_seperators = [?:, ?$]
+		time_seperator = time_seperators[0]
 		point_five_tick = -0.5
 
 		while true
@@ -116,9 +116,9 @@ module Termclock
 
 			if time_now.to_f > point_five_tick
 				point_five_tick = time_now.to_f + 0.5
-				splitters.rotate!
+				time_seperators.rotate!
 				clock_emoji.rotate!
-				splitter = splitters[0]
+				time_seperator = time_seperators[0]
 			end
 
 			unless no_logo
@@ -167,7 +167,7 @@ module Termclock
 					.gradient(tc1, tc2, bold: bold, italic: italic, exclude_spaces: true)
 			end
 
-			time = time_now.strftime(time_format).split.join(splitter)
+			time = time_now.strftime(time_format).split.join(time_seperator)
 			art = Termclock::ParseCharacters.display(time).lines
 
 			art_aligned = art.each_with_index do |x, i|
