@@ -31,7 +31,7 @@ module Termclock
 			ary
 		end
 
-		gc_compact, gc_compacted = GC.respond_to?(:compact), Time.now.to_i + 7200
+		gc_compact, gc_compacted = GC.respond_to?(:compact), Time.now.to_i + GC_COMPACT_TIME
 		print CLEAR
 
 		r1, g1, b1 = *colour1
@@ -197,7 +197,7 @@ module Termclock
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact
-				gc_compacted = time_now.to_i + 7200
+				gc_compacted = time_now.to_i + GC_COMPACT_TIME
 			end
 
 			monotonic_time_2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
