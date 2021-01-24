@@ -3,20 +3,22 @@ require 'termclock'
 $-v = nil
 STDOUT.sync = true
 
-def version
+def version(logo_colour)
 	emoji = ?🕐.ord.-(1).chr('utf-8')
 	Time.now.strftime('%I').to_i.times { emoji.next! }
 
 	_v = "#{emoji} This is Termclock v#{Termclock::VERSION}"
 	vl_2 = _v.length / 2
 
-	v_col1 = Termclock.hex2rgb('ff0')
-	v_col2 = Termclock.hex2rgb('f55')
-	v_col3 = Termclock.hex2rgb('55f')
-
-	_v[0...vl_2].gradient(v_col1, v_col2, underline: true, bold: true) <<
-		_v[vl_2..-1].gradient(v_col2, v_col3, underline: true, bold: true)
+	_v[0...vl_2].gradient(logo_colour[0], logo_colour[1], underline: true, bold: true) <<
+		_v[vl_2..-1].gradient(logo_colour[1], logo_colour[2], underline: true, bold: true)
 end
+
+logo_colour = [
+	%w(ff0  f55 55f),
+	%w(fa0  f5a 55f),
+	%w(3eb  55f 55f),
+].sample.map(&Termclock.method(:hex2rgb))
 
 if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 	puts <<~EOF
@@ -55,22 +57,14 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
-		#{version}
+		#{version(logo_colour)}
 	EOF
 
 	exit 0
 end
 
 if ARGV.any? { |x| x[/\A\-(-version|v)\z/] }
-	colour = [
-		[[255, 100, 100], [100, 100, 255]],
-		[[60, 230, 180], [100, 100, 255]],
-		[[255, 255, 0], [100, 100, 255]],
-		[[255, 80, 170], [255, 200, 0]],
-	].sample
-
-	colour.reverse! if rand < 0.5
-	puts version
+	puts version(logo_colour)
 	exit 0
 end
 
@@ -141,7 +135,8 @@ begin
 		print_date: !no_print_date,
 		no_logo: no_logo,
 		time_format: time_format,
-		date_format: date_format
+		date_format: date_format,
+		logo_colour: logo_colour
 	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"

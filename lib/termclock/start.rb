@@ -8,7 +8,8 @@ module Termclock
 		print_date: true,
 		time_format: "%H %M %S %2N",
 		date_format: '%a, %d %B %Y',
-		no_logo: false
+		no_logo: false,
+		logo_colour: [Termclock.hex2rgb('ff0'), Termclock.hex2rgb('f55'), Termclock.hex2rgb('55f')]
 		)
 
 		generate = proc do |start, stop, n = 5|
@@ -100,14 +101,13 @@ module Termclock
 
 		version = "Termclock v#{Termclock::VERSION}"
 
-		v_col1 = hex2rgb('ff0')
-		v_col2 = hex2rgb('f55')
-		v_col3 = hex2rgb('f55')
-		v_col4 = hex2rgb('55f')
+		v_col1 = logo_colour[0]
+		v_col2 = logo_colour[1]
+		v_col3 = logo_colour[2]
 
 		vl_2 = version.length / 2
 		_term_clock_v = version[0...vl_2].gradient(v_col1, v_col2, underline: true, bold: bold, italic: italic) <<
-			version[vl_2..-1].gradient(v_col3, v_col4, underline: true, bold: bold, italic: italic)
+			version[vl_2..-1].gradient(v_col2, v_col3, underline: true, bold: bold, italic: italic)
 
 		term_clock_v = ''
 
@@ -193,7 +193,7 @@ module Termclock
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
 
-			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v} -- #{deviation}"
+			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact
