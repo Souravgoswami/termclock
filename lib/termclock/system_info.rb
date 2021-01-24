@@ -20,10 +20,10 @@ module Termclock
 				@@current_net_usage_t = Thread.new do
 					_m = LS::Net.current_usage(0.25)
 
-					_dl = LS::PrettifyBytes.convert_short_binary(_m[:received], precision: 0)
-					_ul = LS::PrettifyBytes.convert_short_binary(_m[:transmitted], precision: 0)
+					_dl = LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)
+					_ul = LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)
 
-					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{sprintf "%-7s", _dl} | #{sprintf "%7s", _ul}"
+					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{sprintf "%-8s", _dl} | #{sprintf "%8s", _ul}"
 				end
 			end
 
@@ -48,28 +48,28 @@ module Termclock
 			_m = LS::Net.total_bytes
 			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
 
-			net_usage = "\u{1F4C8} Totl. DL/UL: #{sprintf "%-7s", LS::PrettifyBytes.convert_short_binary(_m[:received], precision: 0)}"\
-			" | #{sprintf "%7s", LS::PrettifyBytes.convert_short_binary(_m[:transmitted], precision: 0)}"
+			net_usage = "\u{1F4C8} Totl. DL/UL: #{sprintf "%-8s", LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)}"\
+			" | #{sprintf "%8s", LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)}"
 
 			_m = LS::Memory.stat
 			_m.default = 0
 
-			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_binary(_m[:used] * 1024)}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total] * 1024)}"\
+			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
+			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
 			" (#{_m[:percent_used]}%)"
 
 			_m = LS::Swap.stat
 			_m.default = 0
 
-			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_binary(_m[:used] * 1024)}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total] * 1024)}"\
+			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
+			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
 			" (#{_m[:percent_used]}%)"
 
 			_m = LS::Filesystem.stat('/')
 			_m.default = 0
 
-			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_binary(_m[:used])}"\
-			" / #{LS::PrettifyBytes.convert_short_binary(_m[:total])}"\
+			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
+			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total])}"\
 			" (#{_m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
 
 			pt = LS::Process.types.values
