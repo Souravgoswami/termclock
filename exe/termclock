@@ -47,14 +47,21 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--refresh|r\t\t\tSpecify delay or refresh time
 			--no-logo|-nl\t\t\tDon't show the logo at the bottom
 
-		\e[1m4. Formats:\e[0m
+		\e[1m4. Antiflicker:\e[0m
+			--antiflicker=|-af=\t\tDon't flicker terminal
+
+			\u2B22 \e[3mIf refresh time is low or terminal is slow, use this option\e[0m
+			\u2B22 \e[3mWhen enabled, you shouldn't resize the terminal while termclock
+			is running.\e[0m
+
+		\e[1m5. Formats:\e[0m
 			--date-format=|-df=\t\tSpecify the date format
 			--time-format=|-tf=\t\tSpecify the time format
 
 			Usually the format looks like this:
 			%H:%M:%S:%2N or %d %B, %Y
 
-			\e[3mRun `date --help` to know more formats\e[0m
+			\u2B22 \e[3mRun `date --help` to know more formats\e[0m
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
@@ -106,6 +113,7 @@ begin
 
 	bold = ARGV.any? { |x| x[/\A\-(\-bold|b)\z/] }
 	italic = ARGV.any? { |x| x[/\A\-(\-italic|i)\z/] }
+	anti_flicker = ARGV.any? { |x| x[/\A\-(\-antiflicker|af)\z/] }
 
 	no_print_info = ARGV.any? { |x| x[/\A\-(\-no\-sysinfo|ni)\z/] }
 	no_logo = ARGV.any? { |x| x[/\A\-(\-no\-logo|nl)\z/] }
@@ -137,7 +145,8 @@ begin
 		no_logo: no_logo,
 		time_format: time_format,
 		date_format: date_format,
-		logo_colour: logo_colour
+		logo_colour: logo_colour,
+		anti_flicker: anti_flicker
 	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"

@@ -9,8 +9,11 @@ module Termclock
 		time_format: "%H %M %S %2N",
 		date_format: '%a, %d %B %Y',
 		no_logo: false,
+		anti_flicker: false,
 		logo_colour: [Termclock.hex2rgb('ff0'), Termclock.hex2rgb('f55'), Termclock.hex2rgb('55f')]
 		)
+
+		clear_character = anti_flicker ? ANTIFLICKER : CLEAR
 
 		generate = proc do |start, stop, n = 5|
 			r_op = r_val = nil
@@ -182,7 +185,8 @@ module Termclock
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
 
-			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v}"
+			final_output = "#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n\e[2K#{message_final}#{term_clock_v}"
+			print "#{clear_character}#{final_output}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact

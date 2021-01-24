@@ -5,6 +5,7 @@ require_relative "termclock/version"
 module Termclock
 	GC_COMPACT_TIME = 7200
 	CLEAR = "\e[H\e[2J\e[3J".freeze
+	ANTIFLICKER = "\e[J\e[1;1H".freeze
 	NEWLINE = ?\n.freeze
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
