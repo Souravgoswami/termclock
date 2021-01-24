@@ -6,7 +6,7 @@ module Termclock
 	@@current_net_usage_t = Thread.new { }.join
 
 	class << self
-		def system_info(width)
+		def system_info(width, tc1, tc2, bold, italic)
 			unless @@cpu_usage_t.alive?
 				@@cpu_usage_t = Thread.new {
 					_cpu_usage = LS::CPU.usage(0.25)
@@ -23,11 +23,11 @@ module Termclock
 					_dl = LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)
 					_ul = LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)
 
-					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{sprintf "%-8s", _dl} | #{sprintf "%8s", _ul}"
+					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{"%-8s" % _dl} | #{ "%8s" % _ul}"
 				end
 			end
 
-			cpu = "\u{1F9E0} CPU: #{sprintf "%5s", @@cpu_usage}% (#{LS::CPU.count_online} / #{LS::CPU.count})"
+			cpu = "\u{1F9E0} CPU: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
 
 			battery = if LS::Battery.present?
 				stat = LS::Battery.stat
@@ -48,29 +48,29 @@ module Termclock
 			_m = LS::Net.total_bytes
 			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
 
-			net_usage = "\u{1F4C8} Totl. DL/UL: #{sprintf "%-8s", LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)}"\
-			" | #{sprintf "%8s", LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)}"
+			net_usage = "\u{1F4C8} Totl. DL/UL: #{"%-8s" % LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)}"\
+			" | #{"%8s" % LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)}"
 
 			_m = LS::Memory.stat
 			_m.default = 0
 
 			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
-			" (#{_m[:percent_used]}%)"
+			" (#{"%.2f" % _m[:percent_used]}%)"
 
 			_m = LS::Swap.stat
 			_m.default = 0
 
 			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
-			" (#{_m[:percent_used]}%)"
+			" (#{"%.2f" % _m[:percent_used]}%)"
 
 			_m = LS::Filesystem.stat('/')
 			_m.default = 0
 
 			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total])}"\
-			" (#{_m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
+			" (#{"%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
 
 			pt = LS::Process.types.values
 
@@ -98,7 +98,7 @@ module Termclock
 
 			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{ms} (#{LS::OS.uptime_i}s)"
 
-			_loadavg = LS::Sysinfo.loads.map! { |x| sprintf("%.2f", x) }
+			_loadavg = LS::Sysinfo.loads.map! { |x| "%.2f" % x }
 			loadavg = "\u{1F9FA} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
 
 			all_info = []
@@ -128,7 +128,25 @@ module Termclock
 			max_l += 4
 
 			all_info.each_slice(2).map { |x, y|
-				"\s#{x}#{SPACE.*(width.-(x.length + max_l).abs)}#{y}"
+				_diff = width.-(x.length + max_l)
+				_diff = 0 if _diff < 1
+				y_to_s = y.to_s
+
+				padding = "#{SPACE * _diff}"
+				str = SPACE + x + padding + y_to_s
+
+				grads = SPACE + x.gradient(tc1, tc2, bold: bold, italic: italic) +
+					padding +
+					y_to_s.gradient(tc1, tc2, bold: bold, italic: italic)
+
+				len = str.chars.map { |x|
+					_x = x.bytesize./(2)
+					_x < 1 ? 1 : _x
+				}.sum
+
+				w = width - 2
+
+				len < w ? grads.+(SPACE.*(w - len)) : grads
 			}.join(NEWLINE)
 		end
 	end

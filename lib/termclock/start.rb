@@ -160,9 +160,10 @@ module Termclock
 			end
 
 			if print_info
-				info = system_info(width).gradient(
-					tc1, tc2, bold: bold, italic: italic
-				)
+				info = system_info(width, tc1, tc2, bold, italic)
+				# .gradient(
+
+				# )
 			end
 
 			if print_date
@@ -184,8 +185,8 @@ module Termclock
 			end.join
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
-
 			final_output = "#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n\e[2K#{message_final}#{term_clock_v}"
+
 			print "#{clear_character}#{final_output}"
 
 			if gc_compact && time_now.to_i > gc_compacted
