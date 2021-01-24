@@ -36,9 +36,10 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--character=|char=\t\tDraws specified character
 			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
-			\t\t\t\t[ with or without # ]
-			--text-colour|-tc\t\tSpecify text colour (2 colours)
-			\t\t\t\t[ with or without # ]
+			--text-colour=|-tc=\t\tSpecify text colour (2 colours)
+
+			\u2B22 \e[3mColours has to be hex, 3 or 6 characters with or
+			without the leading # in front\e[0m
 
 		\e[1m3. Information:\e[0m
 			--no-date|-nd\t\t\tShows no date
