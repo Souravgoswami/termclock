@@ -1,4 +1,10 @@
 module Termclock
+	FILESYSTEM = if LS::FS.stat('/')[:blocks].to_i == 0
+		?.
+	else
+		?/
+	end.freeze
+
 	@@cpu_usage = 0
 	@@cpu_usage_t = Thread.new { }.join
 
@@ -31,13 +37,17 @@ module Termclock
 
 			battery = if LS::Battery.present?
 				stat = LS::Battery.stat
+				charge = stat[:charge].to_i
+
 				emoji, plug = "\u{1F50B}".freeze, EMPTY
 
 				if LS::Battery.charging?
 					emoji, plug = "\u{1F4A1}".freeze, "\u{1F50C} ".freeze
 				end
 
-				"#{emoji} Battery: #{stat[:charge].to_i}% (#{plug}#{stat[:status]})"
+				lives = "\u2665 ".freeze.*(charge.fdiv(20).ceil).chop
+
+				"#{emoji} Battery: #{charge}% #{lives} (#{plug}#{stat[:status]})"
 			else
 				EMPTY
 			end
@@ -65,7 +75,7 @@ module Termclock
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
 			" (#{"%.2f" % _m[:percent_used]}%)"
 
-			_m = LS::Filesystem.stat('/')
+			_m = LS::Filesystem.stat(FILESYSTEM)
 			_m.default = 0
 
 			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
@@ -74,10 +84,14 @@ module Termclock
 
 			pt = LS::Process.types.values
 
-			process = "\u{1F9EE} Process: T:#{"%4s" % pt.length}|"\
-			"R:#{"%3s" % pt.count(:running)}|"\
-			"S:#{"%3s" % pt.count(:sleeping)}|"\
-			"I:#{"%3s" % pt.count(:idle)}"
+			process = if pt.length > 0
+				"\u{1F3ED} Process: T:#{"%4s" % pt.length}|"\
+				"R:#{"%3s" % pt.count(:running)}|"\
+				"S:#{"%3s" % pt.count(:sleeping)}|"\
+				"I:#{"%3s" % pt.count(:idle)}"
+			else
+				EMPTY
+			end
 
 			@@os_v ||= unless LS::OS.version.empty?
 				" (#{LS::OS.version})"
@@ -99,7 +113,7 @@ module Termclock
 			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{ms} (#{LS::OS.uptime_i}s)"
 
 			_loadavg = LS::Sysinfo.loads.map! { |x| "%.2f" % x }
-			loadavg = "\u{1F9FA} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
+			loadavg = "\u{1F525} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
 
 			all_info = []
 			max_l = 0
