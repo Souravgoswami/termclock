@@ -83,8 +83,16 @@ module Termclock
 
 			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{os_v}"
 
-			_uptime = LS::OS.uptime.values.map! { |x| sprintf("%02d".freeze, x.to_i) }.join(?:.freeze)
-			uptime = "\u{1F3A1} Uptime: #{_uptime} (#{LS::OS.uptime_i}s)"
+			_uptime = LS::OS.uptime
+			_second = _uptime[:second]
+			_second_i = _second.to_i
+
+			hour = "%02d" % _uptime[:hour]
+			minute = "%02d" % _uptime[:minute]
+			second = "%02d" % _second_i
+			ms = "%02d" % _second.-(_second_i).*(100)
+
+			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{ms} (#{LS::OS.uptime_i}s)"
 
 			_loadavg = LS::Sysinfo.loads.map! { |x| sprintf("%.2f", x) }
 			loadavg = "\u{1F9FA} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
