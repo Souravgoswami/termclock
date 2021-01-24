@@ -112,6 +112,7 @@ module Termclock
 		term_clock_v = ''
 
 		chop_message = 0
+		deviation = 0
 
 		while true
 			monotonic_time_1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -192,16 +193,19 @@ module Termclock
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
 
-			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v}"
+			print "#{CLEAR}#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n#{message_final}#{term_clock_v} -- #{deviation}"
 
 			if gc_compact && time_now.to_i > gc_compacted
 				GC.compact
 				gc_compacted = time_now.to_i + 7200
 			end
 
-			time_diff = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_1
-			sleep_time = refresh - time_diff.round(4)
+			monotonic_time_2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+			time_diff = monotonic_time_2 - monotonic_time_1
+			sleep_time = refresh.-(time_diff + EPSILON + deviation)
 			sleep_time = 0 if sleep_time < 0
+
+			deviation = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_2
 			sleep(sleep_time)
 		end
 	end

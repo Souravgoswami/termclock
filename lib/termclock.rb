@@ -8,6 +8,7 @@ module Termclock
 	SPACE = ?\s.freeze
 	TAB = ?\t.freeze
 	EMPTY = ''.freeze
+	EPSILON = 5.0e-07
 end
 
 require_relative "termclock/string"
