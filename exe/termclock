@@ -19,11 +19,7 @@ unless STDOUT.tty?
 	IO.define_method(:winsize) { [100, 100] }
 end
 
-logo_colour = [
-	%w(ff0  f55 55f),
-	%w(fa0  f5a 55f),
-	%w(3eb  55f 55f),
-].sample.map(&Termclock.method(:hex2rgb))
+LOGO_COLOUR = %w(ff0  f55 55f).map(&Termclock.method(:hex2rgb))
 
 if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 	puts <<~EOF
@@ -69,14 +65,14 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 
 		Supported characters are 0 - 9, a - z, /, \\, !, %, and |.
 
-		#{version(logo_colour)}
+		#{version(LOGO_COLOUR)}
 	EOF
 
 	exit 0
 end
 
 if ARGV.any? { |x| x[/\A\-(-version|v)\z/] }
-	puts version(logo_colour)
+	puts version(LOGO_COLOUR)
 	exit 0
 end
 
@@ -149,7 +145,7 @@ begin
 		no_logo: no_logo,
 		time_format: time_format,
 		date_format: date_format,
-		logo_colour: logo_colour,
+		logo_colour: LOGO_COLOUR,
 		anti_flicker: anti_flicker
 	)
 rescue Interrupt, SignalException
