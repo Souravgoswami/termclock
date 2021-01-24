@@ -1,7 +1,7 @@
 module Termclock
 	def self.start(colour1, colour2, colour3, colour4,
 		textcolour1 = nil, textcolour2 = nil,
-		sleep: 0.1,
+		refresh: 0.1,
 		bold: false,
 		italic: false,
 		print_info: true, print_message: true,
@@ -114,6 +114,7 @@ module Termclock
 		chop_message = 0
 
 		while true
+			monotonic_time_1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 			time_now = Time.now
 			height, width = *STDOUT.winsize
 
@@ -198,7 +199,10 @@ module Termclock
 				gc_compacted = time_now.to_i + 7200
 			end
 
-			sleep(sleep)
+			time_diff = Process.clock_gettime(Process::CLOCK_MONOTONIC) - monotonic_time_1
+			sleep_time = refresh - time_diff.round(4)
+			sleep_time = 0 if sleep_time < 0
+			sleep(sleep_time)
 		end
 	end
 end

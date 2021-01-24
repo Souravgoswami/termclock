@@ -133,7 +133,7 @@ begin
 	Termclock.start(
 		*colours,
 		*text_colours,
-		sleep: refresh_time,
+		refresh: refresh_time,
 		bold: bold,
 		italic: italic,
 		print_info: !no_print_info,
