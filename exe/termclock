@@ -37,13 +37,14 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--clean\t\t\t\tJust run the clean bare clock
 			--colour=|-c=\t\t\tSpecify hex colour (4 colours)
 			\t\t\t\t[ with or without # ]
+			--text-colour|-tc\t\tSpecify text colour (2 colours)
+			\t\t\t\t[ with or without # ]
 
 		\e[1m3. Information:\e[0m
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
 			--refresh|r\t\t\tSpecify delay or refresh time
-			--text-colour|-tc\t\tSpecify text colour (2 colours)
 			--no-logo|-nl\t\t\tDon't show the logo at the bottom
 
 		\e[1m4. Formats:\e[0m
