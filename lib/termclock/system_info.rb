@@ -20,10 +20,10 @@ module Termclock
 				@@current_net_usage_t = Thread.new do
 					_m = LS::Net.current_usage(0.25)
 
-					_dl = LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)
-					_ul = LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)
+					_dl = LS::PrettifyBytes.convert_short_decimal(_m[:received])
+					_ul = LS::PrettifyBytes.convert_short_decimal(_m[:transmitted])
 
-					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{"%-8s" % _dl} | #{ "%8s" % _ul}"
+					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{"%-9s" % _dl} | #{ "%9s" % _ul}"
 				end
 			end
 
@@ -48,8 +48,8 @@ module Termclock
 			_m = LS::Net.total_bytes
 			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
 
-			net_usage = "\u{1F4C8} Totl. DL/UL: #{"%-8s" % LS::PrettifyBytes.convert_short_decimal(_m[:received], precision: 1)}"\
-			" | #{"%8s" % LS::PrettifyBytes.convert_short_decimal(_m[:transmitted], precision: 1)}"
+			net_usage = "\u{1F4C8} Totl. DL/UL: #{"%-9s" % LS::PrettifyBytes.convert_short_decimal(_m[:received])}"\
+			" | #{"%9s" % LS::PrettifyBytes.convert_short_decimal(_m[:transmitted])}"
 
 			_m = LS::Memory.stat
 			_m.default = 0
@@ -141,7 +141,7 @@ module Termclock
 
 				len = str.chars.map { |x|
 					_x = x.bytesize./(2)
-					_x < 1 ? 1 : _x
+					_x == 0 ? 1 : _x
 				}.sum
 
 				w = width - 2
