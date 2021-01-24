@@ -74,19 +74,18 @@ module Termclock
 
 			pt = LS::Process.types.values
 
-			process = "\u{1F9EE} Process: T:#{sprintf "%4s", LS::Process.count}|"\
-			"R:#{sprintf "%3s", pt.count(:running)}|"\
-			"S:#{sprintf "%3s", pt.count(:sleeping)}|"\
-			"I:#{sprintf "%3s", pt.count(:idle)}"
+			process = "\u{1F9EE} Process: T:#{"%4s" % pt.length}|"\
+			"R:#{"%3s" % pt.count(:running)}|"\
+			"S:#{"%3s" % pt.count(:sleeping)}|"\
+			"I:#{"%3s" % pt.count(:idle)}"
 
-			_os_v = LS::OS.version
-			os_v = unless _os_v.empty?
-				" (#{_os_v})"
+			@@os_v ||= unless LS::OS.version.empty?
+				" (#{LS::OS.version})"
 			else
 				EMPTY
 			end
 
-			os = "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{os_v}"
+			@@os ||= "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{@@os_v}"
 
 			_uptime = LS::OS.uptime
 			_second = _uptime[:second]
@@ -102,19 +101,24 @@ module Termclock
 			_loadavg = LS::Sysinfo.loads.map! { |x| sprintf("%.2f", x) }
 			loadavg = "\u{1F9FA} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
 
-			all_info = [
+			all_info = []
+			max_l = 0
+
+			[
 				user, hostname,
-				os, battery,
+				@@os, battery,
 				cpu, ip,
 				memory, @@current_net_usage,
 				swap, net_usage,
 				fs, process,
 				uptime, loadavg
-			].map(&:to_s).reject(&:empty?)
-			max_l = 0
-
-			all_info.each_with_index { |x, i|
-				max_l = x.length if i.odd? && x.length > max_l
+			].each_with_index { |x, i|
+				x_s = x.to_s
+				unless x.empty?
+					all_info << x
+					_x_len = x.length
+					max_l = _x_len if i.odd? && max_l < _x_len
+				end
 			}
 
 			max_l += 4
