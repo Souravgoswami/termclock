@@ -8,7 +8,12 @@ module Termclock
 	class << self
 		def system_info(width)
 			unless @@cpu_usage_t.alive?
-				@@cpu_usage_t = Thread.new { @@cpu_usage = LS::CPU.usage(0.25) }
+				@@cpu_usage_t = Thread.new {
+					_cpu_usage = LS::CPU.usage(0.25)
+					_cpu_usage_i = _cpu_usage.to_i
+
+					@@cpu_usage = "%0.2f" % _cpu_usage
+				}
 			end
 
 			unless @@current_net_usage_t.alive?
