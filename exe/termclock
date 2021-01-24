@@ -14,6 +14,11 @@ def version(logo_colour)
 		_v[vl_2..-1].gradient(logo_colour[1], logo_colour[2], underline: true, bold: true)
 end
 
+unless STDOUT.tty?
+	IO.undef_method(:winsize)
+	IO.define_method(:winsize) { [100, 100] }
+end
+
 logo_colour = [
 	%w(ff0  f55 55f),
 	%w(fa0  f5a 55f),
@@ -149,6 +154,8 @@ begin
 	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"
+# rescue Errno::ENOTTY
+	# abort "This should be run on a TTY! Also please don't pipe or redirect the output!"
 ensure
 	print "\e[?25h"
 end
