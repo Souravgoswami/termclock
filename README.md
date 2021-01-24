@@ -50,7 +50,7 @@ $ termclock
 ### Termclock also accepts arguments.
 Here are list of all the arguments:
 ```
-1. Information:
+1. Help and Version:
 	--help|-h			Shows this help section
 	--version|-v			Shows termclock version
 
@@ -60,25 +60,35 @@ Here are list of all the arguments:
 	--character=|char=		Draws specified character
 	--clean				Just run the clean bare clock
 	--colour=|-c=			Specify hex colour (4 colours)
-					[ with or without # ]
+	--text-colour=|-tc=		Specify text colour (2 colours)
+
+	⬢ Colours has to be hex, 3 or 6 characters with or
+	without the leading # in front
 
 3. Information:
 	--no-date|-nd			Shows no date
 	--no-message|-nm		Shows no messages
 	--no-sysinfo|-ni		Shows no system info
-	--refresh|r			Specify delay or refresh time
-	--text-colour|-tc		Specify text colour (2 colours)
+	--refresh=|r=			Specify delay or refresh time
+	--no-logo|-nl			Don't show the logo at the bottom
 
-4. Formats:
+4. Antiflicker:
+	--antiflicker|-af		Don't flicker terminal
+
+	⬢ If refresh time is low or terminal is slow, use this option
+
+5. Formats:
 	--date-format=|-df=		Specify the date format
-					[ Run date --help for formats ]
 	--time-format=|-tf=		Specify the time format
-					[ Run date --help for formats ]
+
+	Usually the format looks like this:
+	%H:%M:%S:%2N or %d %B, %Y
+
+	⬢ Run `date --help` to know more formats
 
 Supported characters are 0 - 9, a - z, /, \, !, %, and |.
 
-This is Termclock v0.2.0
-
+🕑 This is Termclock v0.5.0
 ```
 
 Run termclock `--help` or termclock `-h` to see the help.
