@@ -44,15 +44,13 @@ if ARGV.any? { |x| x[/\A\-(\-help|h)\z/] }
 			--no-date|-nd\t\t\tShows no date
 			--no-message|-nm\t\tShows no messages
 			--no-sysinfo|-ni\t\tShows no system info
-			--refresh|r\t\t\tSpecify delay or refresh time
+			--refresh=|r=\t\t\tSpecify delay or refresh time
 			--no-logo|-nl\t\t\tDon't show the logo at the bottom
 
 		\e[1m4. Antiflicker:\e[0m
-			--antiflicker=|-af=\t\tDon't flicker terminal
+			--antiflicker|-af\t\tDon't flicker terminal
 
 			\u2B22 \e[3mIf refresh time is low or terminal is slow, use this option\e[0m
-			\u2B22 \e[3mWhen enabled, you shouldn't resize the terminal while termclock
-			is running.\e[0m
 
 		\e[1m5. Formats:\e[0m
 			--date-format=|-df=\t\tSpecify the date format
