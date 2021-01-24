@@ -112,6 +112,11 @@ module Termclock
 		time_seperator = time_seperators[0]
 		point_five_tick = -0.5
 
+		height, width = *STDOUT.winsize
+		height2, width2 = *STDOUT.winsize
+
+		print CLEAR
+
 		while true
 			monotonic_time_1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 			time_now = Time.now
@@ -159,12 +164,7 @@ module Termclock
 				)
 			end
 
-			if print_info
-				info = system_info(width, tc1, tc2, bold, italic)
-				# .gradient(
-
-				# )
-			end
+			info = system_info(width, tc1, tc2, bold, italic) if print_info
 
 			if print_date
 				date = time_now.strftime(date_format).center(width)
@@ -185,7 +185,12 @@ module Termclock
 			end.join
 
 			vertical_gap = "\e[#{height./(2.0).-(art.length / 2.0).to_i + 1}H"
-			final_output = "#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n\e[2K#{message_final}#{term_clock_v}"
+			final_output = "#{info}#{vertical_gap}#{art_aligned}\n#{date}\n\n\e[K#{message_final}#{term_clock_v}"
+
+			if anti_flicker && (height != height2 || width != width2)
+				height2, width2 = *STDOUT.winsize
+				print CLEAR
+			end
 
 			print "#{clear_character}#{final_output}"
 
