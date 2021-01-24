@@ -103,6 +103,7 @@ module Termclock
 
 			all_info = []
 			max_l = 0
+			i = -1
 
 			[
 				user, hostname,
@@ -112,12 +113,15 @@ module Termclock
 				swap, net_usage,
 				fs, process,
 				uptime, loadavg
-			].each_with_index { |x, i|
-				x_s = x.to_s
+			].each { |x|
 				unless x.empty?
 					all_info << x
-					_x_len = x.length
-					max_l = _x_len if i.odd? && max_l < _x_len
+					i += 1
+
+					if i.odd?
+						_x_len = x.length
+						max_l = _x_len if max_l < _x_len
+					end
 				end
 			}
 
