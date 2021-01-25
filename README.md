@@ -3,6 +3,8 @@ A clock that runs on the LinuxTerminal!
 
 ![Preview](https://github.com/Souravgoswami/termclock/blob/master/previews/preview.gif)
 
+[ Command used: `termclock -af -b -c="f55,05f,f80,09e" -tc="55f,f09"` ]
+
 This project is a Ruby gem, a continuation of my previous project [term-clock](https://github.com/Souravgoswami/term-clock).
 
 TermClock isn't just a clock, it also shows various information about the system as well.
