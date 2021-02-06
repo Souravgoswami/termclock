@@ -107,10 +107,10 @@ module Termclock
 
 			hour = "%02d" % _uptime[:hour]
 			minute = "%02d" % _uptime[:minute]
-			second = "%02d" % _second_i
-			ms = "%02d" % _second.-(_second_i).*(100)
+			second = "%02d" % _uptime[:second]
+			jiffy = "%02d" % _uptime[:jiffy]
 
-			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{ms} (#{LS::OS.uptime_i}s)"
+			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{jiffy} (#{LS::OS.uptime_i}s)"
 
 			_loadavg = LS::Sysinfo.loads.map! { |x| "%.2f" % x }
 			loadavg = "\u{1F525} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
