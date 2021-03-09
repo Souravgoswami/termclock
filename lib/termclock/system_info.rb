@@ -1,8 +1,10 @@
 module Termclock
-	FILESYSTEM = if LS::FS.stat('/')[:blocks].to_i == 0
-		?.
+	FILESYSTEM, FILESYSTEM_LABEL = if LS::FS.stat('/')[:blocks].to_i == 0
+		_pwd =  Dir.pwd
+		pwd = _pwd.length > 8 ? _pwd[0..5] + '...' : _pwd
+		[?..freeze, pwd]
 	else
-		?/
+		[?/.freeze, ?/.freeze]
 	end.freeze
 
 	@@cpu_usage = 0
@@ -96,7 +98,7 @@ module Termclock
 			_m = LS::Filesystem.stat(FILESYSTEM)
 			_m.default = 0
 
-			fs = "\u{1F4BD} FS: #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
+			fs = "\u{1F4BD} FS (#{FILESYSTEM_LABEL}): #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total])}"\
 			" (#{"%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
 
