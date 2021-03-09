@@ -16,9 +16,7 @@ module Termclock
 			unless @@cpu_usage_t.alive?
 				@@cpu_usage_t = Thread.new {
 					_cpu_usage = LS::CPU.usage(0.25)
-					_cpu_usage_i = _cpu_usage.to_i
-
-					@@cpu_usage = "%0.2f" % _cpu_usage
+					@@cpu_usage = _cpu_usage ? "%0.2f".freeze % _cpu_usage : nil
 				}
 			end
 
@@ -26,14 +24,25 @@ module Termclock
 				@@current_net_usage_t = Thread.new do
 					_m = LS::Net.current_usage(0.25)
 
-					_dl = LS::PrettifyBytes.convert_short_decimal(_m[:received])
-					_ul = LS::PrettifyBytes.convert_short_decimal(_m[:transmitted])
+					_dl = _m[:received]
+					_ul = _m[:transmitted]
 
-					@@current_net_usage = "\u{1F4CA} Curr. DL/UL: #{"%-9s" % _dl} | #{ "%9s" % _ul}"
+					@@current_net_usage = if _dl && _ul
+						dl = LS::PrettifyBytes.convert_short_decimal(_dl)
+						ul = LS::PrettifyBytes.convert_short_decimal(_ul)
+
+						"\u{1F4CA} Curr. DL/UL: #{"%-9s" % dl} | #{ "%9s" % ul}"
+					else
+						EMPTY
+					end
 				end
 			end
 
-			cpu = "\u{1F9E0} CPU: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
+			cpu = if @@cpu_usage
+				 "\u{1F9E0} CPU: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
+			else
+				EMPTY
+			end
 
 			battery = if LS::Battery.present?
 				stat = LS::Battery.stat
@@ -58,8 +67,17 @@ module Termclock
 			_m = LS::Net.total_bytes
 			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
 
-			net_usage = "\u{1F4C8} Totl. DL/UL: #{"%-9s" % LS::PrettifyBytes.convert_short_decimal(_m[:received])}"\
-			" | #{"%9s" % LS::PrettifyBytes.convert_short_decimal(_m[:transmitted])}"
+			_received = _m[:received]
+			_transmitted = _m[:transmitted]
+
+			tot_received = _received ? "\u{1F4C8} Totl. DL/UL: #{'%-9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_m[:received])}" : nil
+			tot_transmitted = _transmitted ? " | #{'%9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_transmitted)}" : nil
+
+			net_usage = if tot_received && tot_transmitted
+				tot_received + tot_transmitted
+			else
+				EMPTY
+			end
 
 			_m = LS::Memory.stat
 			_m.default = 0
@@ -101,7 +119,20 @@ module Termclock
 
 			@@os ||= "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{@@os_v}"
 
-			_uptime = LS::OS.uptime
+			_temp_uptime = LS::OS.uptime
+
+			_uptime = unless _temp_uptime.empty?
+				_temp_uptime
+			else
+				_u = LS::OS.uptime_i
+				{
+					hour: _u / 2,
+					minute: _u % 3600 / 60,
+					second: _u % 3600 % 60,
+					jiffy: 0
+				}
+			end
+
 			_second = _uptime[:second]
 			_second_i = _second.to_i
 
