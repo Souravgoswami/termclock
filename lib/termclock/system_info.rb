@@ -126,7 +126,7 @@ module Termclock
 			else
 				_u = LS::OS.uptime_i
 				{
-					hour: _u / 2,
+					hour: _u / 3600,
 					minute: _u % 3600 / 60,
 					second: _u % 3600 % 60,
 					jiffy: 0
