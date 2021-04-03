@@ -128,7 +128,7 @@ The 2nd one looks like:
 + To change the default message (text) colour:
 
 ```
-termclock -text-colour=fa0,55f
+termclock --text-colour=fa0,55f
 # Or
 termclock -tc=fa0,55f
 ```
