@@ -25,9 +25,12 @@ module Termclock
 	LANG = lang
 end
 
+# Translation engine
+require_relative 'termclock/translations.rb'
+require_relative 'termclock/translate.rb'
+
 require_relative "termclock/string"
 require_relative "termclock/parse_characters"
 require_relative "termclock/system_info"
 require_relative "termclock/start"
 require_relative "termclock/hex2rgb"
-require_relative 'termclock/translate.rb'

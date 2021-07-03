@@ -10,7 +10,8 @@ module Termclock
 	@@cpu_usage = 0
 	@@cpu_usage_t = Thread.new { }.join
 
-	@@current_net_usage = "\u{1F4CA} Curr. DL/UL:"
+	_tr = translate('Curr. DL/UL', lang: LANG)
+	@@current_net_usage = "\u{1F4CA} #{_tr}:"
 	@@current_net_usage_t = Thread.new { }.join
 
 	class << self
@@ -30,10 +31,11 @@ module Termclock
 					_ul = _m[:transmitted]
 
 					@@current_net_usage = if _dl && _ul
+						_tr = translate('Curr. DL/UL', lang: LANG)
 						dl = LS::PrettifyBytes.convert_short_decimal(_dl)
 						ul = LS::PrettifyBytes.convert_short_decimal(_ul)
 
-						"\u{1F4CA} Curr. DL/UL: #{"%-9s" % dl} | #{ "%9s" % ul}"
+						"\u{1F4CA} #{_tr}: #{"%-9s" % dl} | #{ "%9s" % ul}"
 					else
 						EMPTY
 					end
@@ -41,7 +43,8 @@ module Termclock
 			end
 
 			cpu = if @@cpu_usage
-				 "\u{1F9E0} CPU: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
+				_tr = translate('CPU', lang: LANG)
+				 "\u{1F9E0} #{_tr}: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
 			else
 				EMPTY
 			end
@@ -58,21 +61,27 @@ module Termclock
 
 				lives = "\u2665 ".freeze.*(charge.fdiv(20).ceil).chop
 
-				"#{emoji} Battery: #{charge}% #{lives} (#{plug}#{stat[:status]})"
+				_tr = translate('Battery', lang: LANG)
+				"#{emoji} #{_tr}: #{charge}% #{lives} (#{plug}#{stat[:status]})"
 			else
 				EMPTY
 			end
 
-			user = "\u{1F481} User: #{LS::User.get_current_user.capitalize}"
-			hostname = "\u{1F4BB} Hostname: #{LS::OS.hostname}"
+			_tr = translate('User', lang: LANG)
+			user = "\u{1F481} #{_tr}: #{LS::User.get_current_user.capitalize}"
 
+			_tr = translate('Hostname', lang: LANG)
+			hostname = "\u{1F4BB} #{_tr}: #{LS::OS.hostname}"
+
+			_tr = translate('IP Addr', lang: LANG)
 			_m = LS::Net.total_bytes
-			ip = "\u{1F30F} IP Addr: #{LS::Net.ipv4_private}"
+			ip = "\u{1F30F} #{_tr}: #{LS::Net.ipv4_private}"
 
 			_received = _m[:received]
 			_transmitted = _m[:transmitted]
 
-			tot_received = _received ? "\u{1F4C8} Totl. DL/UL: #{'%-9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_m[:received])}" : nil
+			_tr = translate('Totl. DL/UL', lang: LANG)
+			tot_received = _received ? "\u{1F4C8} #{_tr}: #{'%-9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_m[:received])}" : nil
 			tot_transmitted = _transmitted ? " | #{'%9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_transmitted)}" : nil
 
 			net_usage = if tot_received && tot_transmitted
@@ -84,28 +93,33 @@ module Termclock
 			_m = LS::Memory.stat
 			_m.default = 0
 
-			memory = "\u{1F3B0} Mem: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
+			_tr = translate('Mem', lang: LANG)
+			memory = "\u{1F3B0} #{_tr}: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
 			" (#{"%.2f" % _m[:percent_used]}%)"
 
 			_m = LS::Swap.stat
 			_m.default = 0
 
-			swap = "\u{1F300} Swap: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
+			_tr = translate('Swap', lang: LANG)
+			swap = "\u{1F300} #{_tr}: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
 			" (#{"%.2f" % _m[:percent_used]}%)"
 
 			_m = LS::Filesystem.stat(FILESYSTEM)
 			_m.default = 0
 
-			fs = "\u{1F4BD} FS (#{FILESYSTEM_LABEL}): #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
+			_tr = translate('FS', lang: LANG)
+			fs = "\u{1F4BD} #{_tr} (#{FILESYSTEM_LABEL}): #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
 			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total])}"\
 			" (#{"%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
 
 			pt = LS::Process.types.values
 
 			process = if pt.length > 0
-				"\u{1F3ED} Process: T:#{"%4s" % pt.length}|"\
+				_tr = translate('Process', lang: LANG)
+
+				"\u{1F3ED} #{_tr}: T:#{"%4s" % pt.length}|"\
 				"R:#{"%3s" % pt.count(:running)}|"\
 				"S:#{"%3s" % pt.count(:sleeping)}|"\
 				"I:#{"%3s" % pt.count(:idle)}"
@@ -119,7 +133,8 @@ module Termclock
 				EMPTY
 			end
 
-			@@os ||= "\u{1F427} Distrib: #{LS::OS.distribution} #{LS::OS.machine}#{@@os_v}"
+			_tr = translate('Swap', lang: LANG)
+			@@os ||= "\u{1F427} #{_tr}: #{LS::OS.distribution} #{LS::OS.machine}#{@@os_v}"
 
 			_temp_uptime = LS::OS.uptime
 
@@ -143,10 +158,12 @@ module Termclock
 			second = "%02d" % _uptime[:second]
 			jiffy = "%02d" % _uptime[:jiffy]
 
-			uptime = "\u{1F3A1} Uptime: #{hour}:#{minute}:#{second}:#{jiffy} (#{LS::OS.uptime_i}s)"
+			_tr = translate('Uptime', lang: LANG)
+			uptime = "\u{1F3A1} #{_tr}: #{hour}:#{minute}:#{second}:#{jiffy} (#{LS::OS.uptime_i}s)"
 
+			_tr = translate('LoadAvg', lang: LANG)
 			_loadavg = LS::Sysinfo.loads.map! { |x| "%.2f" % x }
-			loadavg = "\u{1F525} LoadAvg: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
+			loadavg = "\u{1F525} #{_tr}: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
 
 			all_info = []
 			max_l = 0

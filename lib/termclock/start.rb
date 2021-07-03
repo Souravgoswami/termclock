@@ -79,17 +79,23 @@ module Termclock
 
 			case Time.now.hour
 			when 5...12
-				"\u{1F304} #{braille_0} Good Morning #{braille_0} \u{1F304}"
+				_m = translate('Good Morning', lang: LANG)
+				"\u{1F304} #{braille_0} #{_m} #{braille_0} \u{1F304}"
 			when 12...16
-				"\u26C5 #{braille_0} Good Afternoon #{braille_0} \u26C5"
+				_m = translate('Good Afternoon', lang: LANG)
+				"\u26C5 #{braille_0} #{_m} #{braille_0} \u26C5"
 			when 16...18
-				"\u{1F307} #{braille_0} Good Evening #{braille_0} \u{1F307}"
+				_m = translate('Good Evening', lang: LANG)
+				"\u{1F307} #{braille_0} #{_m} #{braille_0} \u{1F307}"
 			when 18...20
-				"\u{1F31F} #{braille_0} Good Evening #{braille_0} \u{1F31F}"
+				_m = translate('Good Evening', lang: LANG)
+				"\u{1F31F} #{braille_0} #{_m} #{braille_0} \u{1F31F}"
 			when 20...24
-				"\u{1F303} #{braille_0} Good Night #{braille_0} \u{1F303}"
+				_m = translate('Good Night', lang: LANG)
+				"\u{1F303} #{braille_0} #{_m} #{braille_0} \u{1F303}"
 			else
-				"\u{2728} #{braille_0} Good Night #{braille_0} \u{2728}"
+				_m = translate('Good Night', lang: LANG)
+				"\u{2728} #{braille_0} #{_m} #{braille_0} \u{2728}"
 			end
 		}
 
@@ -159,7 +165,7 @@ module Termclock
 					end
 				end
 
-				message_final = (message).rjust(message_align).gradient(
+				message_final = message.rjust(message_align).gradient(
 					tc1, tc2, exclude_spaces: true, bold: bold, italic: italic
 				)
 			end
@@ -167,7 +173,18 @@ module Termclock
 			info = system_info(width, tc1, tc2, bold, italic) if print_info
 
 			if print_date
-				date = time_now.strftime(date_format).center(width)
+				_date = time_now.strftime(date_format)
+
+				unless LANG == :en
+					_date = _date.split(/(\W)/).map { |x|
+						translate(
+							x, lang: LANG,
+							breakword: !x[/[^0-9]/]
+						)
+					}.join
+				end
+
+				date = _date.center(width)
 					.gradient(tc1, tc2, bold: bold, italic: italic, exclude_spaces: true)
 			end
 
