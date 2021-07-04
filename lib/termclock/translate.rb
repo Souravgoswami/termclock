@@ -1,8 +1,10 @@
 module Termclock
-	def self.translate(keyword, breakword: false)
+	def self.translate(keyword, breakword: nil, b: nil)
 		return keyword if LANG == :en
-
 		characters = keyword.grapheme_clusters
+
+		b = breakword if breakword
+		breakword = b if b
 
 		upcased = characters.all? { |x| x.ord.between?(65, 90) }
 		downcased = upcased ? false : characters.all? { |x| x.ord.between?(97, 122) }
@@ -50,5 +52,10 @@ module Termclock
 		end
 
 		tr ? tr : keyword
+	end
+
+	def self.t!(keyword, breakword: true, b: true)
+		return keyword if LANG == :en
+		translate(keyword.to_s, breakword: true)
 	end
 end
