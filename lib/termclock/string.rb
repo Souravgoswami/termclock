@@ -106,4 +106,8 @@ class String
 
 		temp
 	end
+
+	def camelize!
+		replace(split(SPACE).map(&:capitalize).join(SPACE))
+	end
 end
