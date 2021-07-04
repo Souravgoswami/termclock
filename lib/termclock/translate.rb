@@ -2,7 +2,7 @@ module Termclock
 	def self.translate(keyword, breakword: false)
 		return keyword if LANG == :en
 
-		characters = keyword.chars
+		characters = keyword.grapheme_clusters
 
 		upcased = characters.all? { |x| x.ord.between?(65, 90) }
 		downcased = upcased ? false : characters.all? { |x| x.ord.between?(97, 122) }

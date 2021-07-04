@@ -203,7 +203,7 @@ module Termclock
 					padding +
 					y_to_s.gradient(tc1, tc2, bold: bold, italic: italic)
 
-				len = str.chars.map { |x|
+				len = str.grapheme_clusters.map { |x|
 					_x = x.bytesize./(2)
 					_x == 0 ? 1 : _x
 				}.sum
