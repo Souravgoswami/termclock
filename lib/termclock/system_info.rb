@@ -110,7 +110,7 @@ module Termclock
 			_m.default = 0
 
 			_tr = translate('FS')
-			fs = "\u{1F4BD} #{_tr} (#{FILESYSTEM_LABEL}): #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
+			fs = "\u{1F4BD} #{_tr} (#{FILESYSTEM_LABEL}): #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:used]))}"\
 			" / #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:total]))}"\
 			" (#{t!("%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2))}%)"
 
@@ -119,7 +119,7 @@ module Termclock
 			process = if pt.length > 0
 				_tr = translate('Process')
 
-				"\u{1F3ED} #{_tr}: T:#{"%4s" % pt.length}|"\
+				"\u{1F3ED} #{_tr}: T:#{t!("%4s" % pt.length)}|"\
 				"R:#{"%3s" % t!(pt.count(:running))}|"\
 				"S:#{"%3s" % t!(pt.count(:sleeping))}|"\
 				"I:#{"%3s" % t!(pt.count(:idle))}"

@@ -3,8 +3,8 @@ module Termclock
 		return keyword if LANG == :en
 		characters = keyword.grapheme_clusters
 
-		b = breakword if breakword
-		breakword = b if b
+		b = breakword if breakword && !b
+		breakword = b if b && !breakword
 
 		upcased = characters.all? { |x| x.ord.between?(65, 90) }
 		downcased = upcased ? false : characters.all? { |x| x.ord.between?(97, 122) }
