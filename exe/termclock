@@ -150,8 +150,8 @@ begin
 	)
 rescue Interrupt, SignalException
 	print "\e[H\e[2J\e[3J"
-# rescue Errno::ENOTTY
-	# abort "This should be run on a TTY! Also please don't pipe or redirect the output!"
+rescue Errno::ENOTTY
+	abort "This should be run on a TTY! Also please don't pipe or redirect the output!"
 ensure
 	print "\e[?25h"
 end
