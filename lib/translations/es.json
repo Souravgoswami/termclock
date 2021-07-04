@@ -51,6 +51,7 @@
 
 		// System info
 		"User":  "Usuario",
+		"Distrib": "Distribución",
 		"Uptime":  "Tiempo de actividad",
 		"Hostname":  "Nombre de host",
 		"Battery":  "Batería",

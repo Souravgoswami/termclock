@@ -51,6 +51,7 @@
 
 		// System info
 		"User":  "Utente",
+		"Distrib": "Distribuzione",
 		"Hostname":  "Nome host",
 		"Battery":  "batteria",
 		"Curr. DL/UL":  "Attuale DL/UL",
