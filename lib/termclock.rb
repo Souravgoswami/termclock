@@ -39,7 +39,7 @@ module Termclock
 	translation_file = TRANSLATION_FILES[LANG.to_s]
 
 	TRANSLATIONS = if translation_file && File.readable?(translation_file)
-		JSON.parse(IO.read(translation_file)).values[0] rescue {}
+		JSON.parse(IO.read(translation_file)) rescue {}
 	else
 		{}
 	end
