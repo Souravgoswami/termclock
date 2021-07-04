@@ -3,6 +3,7 @@ require 'io/console'
 require 'json'
 
 require_relative "termclock/version"
+require_relative "termclock/center_puts"
 
 module Termclock
 	GC_COMPACT_TIME = 7200
@@ -16,14 +17,21 @@ module Termclock
 
 	# All languages
 	LANGS = %i(
-		bn de en es fr hi it ru
+		bn en es fr hi it ru
 	)
 
 	# LANGUAGES
-	lang = (ENV['LC_ALL'] || ENV['LANG'] || :en).downcase.split(?_)[0].to_sym
-	lang = :en unless LANGS.include?(lang)
+	_lang = if !ENV['LC_ALL'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
+		ENV['LC_ALL']
+	elsif !ENV['LANG'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
+		ENV['LANG']
+	elsif !ENV['LANGUAGE'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
+		ENV['LANGUAGE']
+	else
+		'en'
+	end
 
-	LANG = lang
+	LANG = _lang.downcase.split(?_)[0].to_sym
 
 	# Load translations
 	TRANSLATION_FILES = {}
@@ -39,7 +47,13 @@ module Termclock
 	translation_file = TRANSLATION_FILES[LANG.to_s]
 
 	TRANSLATIONS = if translation_file && File.readable?(translation_file)
-		JSON.parse(IO.read(translation_file)) rescue {}
+		begin
+			JSON.parse(IO.read(translation_file))
+		rescue StandardError
+			center_puts "Can't Parse Translation File!"
+			sleep 0.5
+			{}
+		end
 	else
 		{}
 	end
