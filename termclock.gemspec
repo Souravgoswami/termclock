@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 	s.homepage = "https://github.com/souravgoswami/termclock"
 	s.license = "MIT"
 	s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
-	s.files = Dir.glob(%w(exe/** lib/**/*.rb))
+	s.files = Dir.glob(%w(exe/** lib/translations/*.json lib/**/*.rb))
 	s.executables = s.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
 	s.require_paths = ["lib"]
 	s.bindir = "exe"

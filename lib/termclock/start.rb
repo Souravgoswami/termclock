@@ -79,22 +79,22 @@ module Termclock
 
 			case Time.now.hour
 			when 5...12
-				_m = translate('Good Morning', lang: LANG)
+				_m = translate('Good Morning')
 				"\u{1F304} #{braille_0} #{_m} #{braille_0} \u{1F304}"
 			when 12...16
-				_m = translate('Good Afternoon', lang: LANG)
+				_m = translate('Good Afternoon')
 				"\u26C5 #{braille_0} #{_m} #{braille_0} \u26C5"
 			when 16...18
-				_m = translate('Good Evening', lang: LANG)
+				_m = translate('Good Evening')
 				"\u{1F307} #{braille_0} #{_m} #{braille_0} \u{1F307}"
 			when 18...20
-				_m = translate('Good Evening', lang: LANG)
+				_m = translate('Good Evening')
 				"\u{1F31F} #{braille_0} #{_m} #{braille_0} \u{1F31F}"
 			when 20...24
-				_m = translate('Good Night', lang: LANG)
+				_m = translate('Good Night')
 				"\u{1F303} #{braille_0} #{_m} #{braille_0} \u{1F303}"
 			else
-				_m = translate('Good Night', lang: LANG)
+				_m = translate('Good Night')
 				"\u{2728} #{braille_0} #{_m} #{braille_0} \u{2728}"
 			end
 		}
@@ -178,7 +178,7 @@ module Termclock
 				unless LANG == :en
 					_date = _date.split(/(\W)/).map { |x|
 						translate(
-							x, lang: LANG,
+							x,
 							breakword: !x[/[^0-9]/]
 						)
 					}.join

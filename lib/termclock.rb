@@ -1,5 +1,6 @@
 require 'linux_stat'
 require 'io/console'
+require 'json'
 
 require_relative "termclock/version"
 
@@ -23,10 +24,28 @@ module Termclock
 	lang = :en unless LANGS.include?(lang)
 
 	LANG = lang
+
+	# Load translations
+	TRANSLATION_FILES = {}
+
+	Dir.glob(File.join(__dir__, 'translations', '*.json')).each { |x|
+		next if x == '..'.freeze || x == ?..freeze || !File.readable?(x)
+
+		TRANSLATION_FILES.merge!(
+			File.basename(x).split(?..freeze).tap(&:pop).join(?..freeze) => x
+		)
+	}
+
+	translation_file = TRANSLATION_FILES[LANG.to_s]
+
+	TRANSLATIONS = if translation_file && File.readable?(translation_file)
+		JSON.parse(IO.read(translation_file)).values[0] rescue {}
+	else
+		{}
+	end
 end
 
 # Translation engine
-require_relative 'termclock/translations.rb'
 require_relative 'termclock/translate.rb'
 
 require_relative "termclock/string"
