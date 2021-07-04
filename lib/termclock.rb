@@ -21,17 +21,26 @@ module Termclock
 	)
 
 	# LANGUAGES
-	_lang = if !ENV['LC_ALL'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
-		ENV['LC_ALL']
-	elsif !ENV['LANG'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
-		ENV['LANG']
-	elsif !ENV['LANGUAGE'] &.empty? && !LANGS.include?(ENV['LC_ALL'])
-		ENV['LANGUAGE']
-	else
-		'en'
+	env_lc_all = ENV['LC_ALL'] && !ENV['LC_ALL'].empty? && ENV['LC_ALL'].downcase.split(?_)[0].to_sym
+
+	_lang = nil
+	_lang = env_lc_all if LANGS.include?(env_lc_all)
+
+	unless _lang
+		env_language = ENV['LANGUAGE'] && !ENV['LANGUAGE'].empty? && ENV['LANGUAGE'].downcase.split(?_)[0].to_sym
+		_lang = env_language if LANGS.include?(env_language)
 	end
 
-	LANG = _lang.downcase.split(?_)[0].to_sym
+	unless _lang
+		env_lang = ENV['LANG'] && !ENV['LANG'].empty? && ENV['LANG'].downcase.split(?_)[0].to_sym
+		_lang = env_lang if LANGS.include?(env_lang)
+	end
+
+	unless _lang
+		_lang = :en
+	end
+
+	LANG = _lang.freeze
 
 	# Load translations
 	TRANSLATION_FILES = {}
