@@ -149,7 +149,9 @@ module Termclock
 						chop_message += 1
 						message_counter -= 1
 						message_align -= 1
-						message.replace(message_temp[chop_message..-1])
+
+						_chopped = message_temp[chop_message..-1]
+						message.replace(_chopped) if _chopped
 					end
 				else
 					chop_message = 0 unless chop_message == 0
