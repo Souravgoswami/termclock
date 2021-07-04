@@ -35,7 +35,7 @@ module Termclock
 						dl = LS::PrettifyBytes.convert_short_decimal(_dl)
 						ul = LS::PrettifyBytes.convert_short_decimal(_ul)
 
-						"\u{1F4CA} #{_tr}: #{"%-9s" % dl} | #{ "%9s" % ul}"
+						"\u{1F4CA} #{_tr}: #{t!("%-9s" % dl)} | #{t!("%9s" % ul)}"
 					else
 						EMPTY
 					end
@@ -44,7 +44,7 @@ module Termclock
 
 			cpu = if @@cpu_usage
 				_tr = translate('CPU')
-				 "\u{1F9E0} #{_tr}: #{"%6s" % @@cpu_usage}% (#{LS::CPU.count_online}/#{LS::CPU.count})"
+				 "\u{1F9E0} #{_tr}: #{t!("%6s" % @@cpu_usage)}% (#{t!(LS::CPU.count_online)}/#{t!(LS::CPU.count)})"
 			else
 				EMPTY
 			end
@@ -62,7 +62,7 @@ module Termclock
 				lives = "\u2665 ".freeze.*(charge.fdiv(20).ceil).chop
 
 				_tr = translate('Battery')
-				"#{emoji} #{_tr}: #{charge}% #{lives} (#{plug}#{stat[:status]})"
+				"#{emoji} #{_tr}: #{t!(charge.to_s)}% #{lives} (#{plug}#{stat[:status]})"
 			else
 				EMPTY
 			end
@@ -75,14 +75,14 @@ module Termclock
 
 			_tr = translate('IP Addr')
 			_m = LS::Net.total_bytes
-			ip = "\u{1F30F} #{_tr}: #{LS::Net.ipv4_private}"
+			ip = "\u{1F30F} #{_tr}: #{translate(LS::Net.ipv4_private, b: true)}"
 
 			_received = _m[:received]
 			_transmitted = _m[:transmitted]
 
 			_tr = translate('Totl. DL/UL')
-			tot_received = _received ? "\u{1F4C8} #{_tr}: #{'%-9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_m[:received])}" : nil
-			tot_transmitted = _transmitted ? " | #{'%9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_transmitted)}" : nil
+			tot_received = _received ? "\u{1F4C8} #{_tr}: #{t!('%-9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_m[:received]))}" : nil
+			tot_transmitted = _transmitted ? " | #{t!('%9s'.freeze % LS::PrettifyBytes.convert_short_decimal(_transmitted))}" : nil
 
 			net_usage = if tot_received && tot_transmitted
 				tot_received + tot_transmitted
@@ -94,25 +94,25 @@ module Termclock
 			_m.default = 0
 
 			_tr = translate('Mem')
-			memory = "\u{1F3B0} #{_tr}: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
-			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
-			" (#{"%.2f" % _m[:percent_used]}%)"
+			memory = "\u{1F3B0} #{_tr}: #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000))}"\
+			" / #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000))}"\
+			" (#{t!("%.2f" % _m[:percent_used])}%)"
 
 			_m = LS::Swap.stat
 			_m.default = 0
 
 			_tr = translate('Swap')
-			swap = "\u{1F300} #{_tr}: #{LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000)}"\
-			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000)}"\
-			" (#{"%.2f" % _m[:percent_used]}%)"
+			swap = "\u{1F300} #{_tr}: #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:used] * 1000))}"\
+			" / #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:total] * 1000))}"\
+			" (#{t!("%.2f" % _m[:percent_used])}%)"
 
 			_m = LS::Filesystem.stat(FILESYSTEM)
 			_m.default = 0
 
 			_tr = translate('FS')
 			fs = "\u{1F4BD} #{_tr} (#{FILESYSTEM_LABEL}): #{LS::PrettifyBytes.convert_short_decimal(_m[:used])}"\
-			" / #{LS::PrettifyBytes.convert_short_decimal(_m[:total])}"\
-			" (#{"%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2)}%)"
+			" / #{t!(LS::PrettifyBytes.convert_short_decimal(_m[:total]))}"\
+			" (#{t!("%.2f" % _m[:used].*(100).fdiv(_m[:total]).round(2))}%)"
 
 			pt = LS::Process.types.values
 
@@ -120,9 +120,9 @@ module Termclock
 				_tr = translate('Process')
 
 				"\u{1F3ED} #{_tr}: T:#{"%4s" % pt.length}|"\
-				"R:#{"%3s" % pt.count(:running)}|"\
-				"S:#{"%3s" % pt.count(:sleeping)}|"\
-				"I:#{"%3s" % pt.count(:idle)}"
+				"R:#{"%3s" % t!(pt.count(:running))}|"\
+				"S:#{"%3s" % t!(pt.count(:sleeping))}|"\
+				"I:#{"%3s" % t!(pt.count(:idle))}"
 			else
 				EMPTY
 			end
@@ -133,7 +133,7 @@ module Termclock
 				EMPTY
 			end
 
-			_tr = translate('Swap')
+			_tr = translate('Distrib')
 			@@os ||= "\u{1F427} #{_tr}: #{LS::OS.distribution} #{LS::OS.machine}#{@@os_v}"
 
 			_temp_uptime = LS::OS.uptime
@@ -159,11 +159,11 @@ module Termclock
 			jiffy = "%02d" % _uptime[:jiffy]
 
 			_tr = translate('Uptime')
-			uptime = "\u{1F3A1} #{_tr}: #{hour}:#{minute}:#{second}:#{jiffy} (#{LS::OS.uptime_i}s)"
+			uptime = "\u{1F3A1} #{_tr}: #{t! hour}:#{t! minute}:#{t! second}:#{t! jiffy} (#{t! LS::OS.uptime_i}s)"
 
 			_tr = translate('LoadAvg')
 			_loadavg = LS::Sysinfo.loads.map! { |x| "%.2f" % x }
-			loadavg = "\u{1F525} #{_tr}: 1m #{_loadavg[0]}|5m #{_loadavg[1]}|15m #{_loadavg[2]}"
+			loadavg = "\u{1F525} #{_tr}: 1m #{translate(_loadavg[0], b: true)}|5m #{translate(_loadavg[1], b: true)}|15m #{translate(_loadavg[2], b: true)}"
 
 			all_info = []
 			max_l = 0
