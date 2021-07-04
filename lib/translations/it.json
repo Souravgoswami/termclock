@@ -1,0 +1,61 @@
+{
+	"it": {
+		// Days
+		"monday": "lunedi",
+		"tuesday": "martedì",
+		"wednesday": "mercoledì",
+		"thursday": "giovedì",
+		"friday": "venerdì",
+		"saturday": "sabato",
+		"sunday": "domenica",
+
+		"mon": "lun",
+		"tue": "mar",
+		"wed": "mer",
+		"thu": "gio",
+		"fri": "ven",
+		"sat": "sab",
+		"sun": "do",
+
+		// Months
+		"jan": "gennaio",
+		"feb": "febbraio",
+		"mar": "marzo",
+		"apr": "aprile",
+		"may": "maggio",
+		"jun": "giugno",
+		"jul": "luglio",
+		"aug": "agosto",
+		"sep": "settembre",
+		"oct": "ottobre",
+		"nov": "novembre",
+		"dec": "dicembre",
+
+		"january": "gennaio",
+		"february": "febbraio",
+		"march": "marzo",
+		"april": "aprile",
+		"june": "giugno",
+		"july": "luglio",
+		"august": "agosto",
+		"september": "settembre",
+		"october": "ottobre",
+		"november": "novembre",
+		"december": "dicembre",
+
+		// Messages
+		"good morning": "buongiorno",
+		"good afternoon": "buon pomeriggio",
+		"good evening": "buonasera",
+		"good night": "buona Notte",
+
+		// System info
+		"User":  "Utente",
+		"Hostname":  "Nome host",
+		"Battery":  "batteria",
+		"Curr. DL/UL":  "Attuale DL/UL",
+		"Totl. DL/UL":  "Totale DL/UL",
+		"Process":  "Processi",
+		"LoadAvg":  "Carico Medio"
+	}
+}
