@@ -1,0 +1,62 @@
+{
+	"es": {
+		// Days
+		"monday": "lunes",
+		"tuesday": "martes",
+		"wednesday": "miércoles",
+		"thursday": "jueves",
+		"friday": "viernes",
+		"saturday": "sábado",
+		"sunday": "dimanche",
+
+		"mon": "lunes",
+		"tue": "martes",
+		"wed": "miércoles",
+		"thu": "jueves",
+		"fri": "viernes",
+		"sat": "sábado",
+		"sun": "dimanche",
+
+		// Months
+		"jan": "janvier",
+		"feb": "février",
+		"mar": "mars",
+		"apr": "avril",
+		"jun": "juin",
+		"jul": "juillet",
+		"aug": "août",
+		"sep": "septembre",
+		"oct": "octobre",
+		"nov": "novembre",
+		"dec": "décembre",
+
+		"january": "janvier",
+		"february": "février",
+		"march": "mars",
+		"april": "avril",
+		"may": "mai",
+		"june": "juin",
+		"july": "juillet",
+		"august": "août",
+		"september": "septembre",
+		"october": "octobre",
+		"november": "novembre",
+		"december": "décembre",
+
+		// Messages
+		"good morning": "buenos días",
+		"good afternoon": "buenas tardes",
+		"good evening": "buenas noches",
+		"good night": "buenas noches",
+
+		// System info
+		"User":  "Usuario",
+		"Uptime":  "Tiempo de actividad",
+		"Hostname":  "Nombre de host",
+		"Battery":  "Batería",
+		"Curr. DL/UL":  "Actual. DL/UL",
+		"Totl. DL/UL":  "Total DL/UL",
+		"Process":  "Proceso",
+		"LoadAvg":  "Carga promedio"
+	}
+}

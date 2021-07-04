@@ -1,0 +1,62 @@
+{
+	"fr": {
+		// Days
+		"monday": "lundi",
+		"tuesday": "mardi",
+		"wednesday": "mercredi",
+		"thursday": "jeudi",
+		"friday": "vendredi",
+		"saturday": "samedi",
+		"sunday": "domingo",
+
+		"mon": "lundi",
+		"tue": "mardi",
+		"wed": "mercredi",
+		"thu": "jeudi",
+		"fri": "vendredi",
+		"sat": "samedi",
+		"sun": "dimanche",
+
+		// Months
+		"jan": "enero",
+		"feb": "febrero",
+		"mar": "marcha",
+		"apr": "abril",
+		"jun": "junio",
+		"jul": "julio",
+		"aug": "agosto",
+		"sep": "septiembre",
+		"oct": "octubre",
+		"nov": "noviembre",
+		"dec": "diciembre",
+
+		"january": "enero",
+		"february": "febrero",
+		"march": "marcha",
+		"april": "abril",
+		"may": "mayo",
+		"june": "junio",
+		"july": "julio",
+		"august": "agosto",
+		"september": "septiembre",
+		"october": "octubre",
+		"november": "noviembre",
+		"december": "diciembre",
+
+		// Messages
+		"good morning": "bonjour",
+		"good afternoon": "bonne après-midi",
+		"good evening": "bonne soirée",
+		"good night": "bonne nuit",
+
+		// System info
+		"User":  "Utilisatrice",
+		"Uptime":  "Disponibilité",
+		"Hostname":  "Nom d\"hôte",
+		"Battery":  "La batterie",
+		"Curr. DL/UL":  "Actuelle DL/UL",
+		"Totl. DL/UL":  "Total DL/UL",
+		"Process":  "Processus",
+		"LoadAvg":  "Charge Moyenne"
+	}
+}
