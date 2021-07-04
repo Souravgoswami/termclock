@@ -71,7 +71,7 @@
 		"Hostname":  "होस्टनाम",
 		"Battery":  "बैटरी ",
 		"Curr. DL/UL":  "वर्तमान DL/UL",
-		"totl. DL/UL":  "समस्त DL/UL",
+		"Totl. DL/UL":  "समस्त DL/UL",
 		"Process":  "प्रोसेस",
 		"LoadAvg":  "औसत लोड"
 	}

@@ -72,7 +72,7 @@
 		"Battery":  "ব্যাটারী",
 		"Ip Addr":  "আইপি",
 		"Curr. DL/UL":  "বর্তমান DL/UL",
-		"totl. DL/UL":  "মোট DL/UL",
+		"Totl. DL/UL":  "মোট DL/UL",
 		"Process":  "প্রসেস",
 		"LoadAvg":  "গড় লোড"
 	}
