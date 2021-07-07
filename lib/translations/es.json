@@ -57,5 +57,9 @@
 	"Curr. DL/UL":  "Actual. DL/UL",
 	"Totl. DL/UL":  "Total DL/UL",
 	"Process":  "Proceso",
-	"LoadAvg":  "Carga promedio"
+	"LoadAvg":  "Carga promedio",
+	"Discharging": "Descarga",
+	"Charging": "Cargando",
+	"Full": "Lleno",
+	"Unknown": "Desconocida"
 }

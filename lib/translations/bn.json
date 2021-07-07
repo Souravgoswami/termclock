@@ -74,5 +74,9 @@
 	"Curr. DL/UL":  "বর্তমান DL/UL",
 	"Totl. DL/UL":  "মোট DL/UL",
 	"Process":  "প্রসেস",
-	"LoadAvg":  "গড় লোড"
+	"LoadAvg":  "গড় লোড",
+	"Discharging": "ডিসচারজিং",
+	"Charging": "চার্জিং",
+	"Full": "সম্পূর্ণ",
+	"Unknown": "অজানা"
 }

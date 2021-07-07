@@ -73,5 +73,9 @@
 	"Curr. DL/UL":  "वर्तमान DL/UL",
 	"Totl. DL/UL":  "समस्त DL/UL",
 	"Process":  "प्रोसेस",
-	"LoadAvg":  "औसत लोड"
+	"LoadAvg":  "औसत लोड",
+	"Discharging": "डिस्चार्जिंग",
+	"Charging": "चार्जिंग",
+	"Full": "परिपूर्ण",
+	"Unknown": "अनजान"
 }

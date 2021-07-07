@@ -62,7 +62,7 @@ module Termclock
 				lives = "\u2665 ".freeze.*(charge.fdiv(20).ceil).chop
 
 				_tr = translate('Battery')
-				"#{emoji} #{_tr}: #{t!(charge.to_s)}% #{lives} (#{plug}#{stat[:status]})"
+				"#{emoji} #{_tr}: #{t!(charge)}% #{lives} (#{plug}#{translate(stat[:status])})"
 			else
 				EMPTY
 			end
